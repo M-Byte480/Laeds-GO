@@ -14,5 +14,5 @@ The project contributers are:
 - [Milan Kovacs](https://github.com/M-Byte480)
 - [Boris Bobylkov](https://github.com/Bojo992)
 - [Tadhg Ryan](https://github.com/tadhgryan2012)
-- [Szymon Szulcs](https://github.com/s1m0nWasTaken)
+- [Szymon Szulc](https://github.com/s1m0nWasTaken)
 - [Craig Phayer](https://github.com/CraigPhayer)
