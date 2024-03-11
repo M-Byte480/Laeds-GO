@@ -35,6 +35,8 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    private Button buttonLoginIn;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -46,8 +48,12 @@ public class HomeFragment extends Fragment {
         final TextView textView = binding.textHome;
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
-        Button button = (Button) root.findViewById(R.id.buttonHomeSignIn);
-        button.setOnClickListener(v -> {
+        //Force logout user for testing
+        FirebaseAuth.getInstance().signOut();
+
+        //Login eventListener
+        buttonLoginIn = (Button) root.findViewById(R.id.buttonHomeSignIn);
+        buttonLoginIn.setOnClickListener(v -> {
             // Your button click logic here
             System.out.println("Sign in clicked");
             // Choose authentication providers
@@ -64,6 +70,19 @@ public class HomeFragment extends Fragment {
                     .build();
             signInLauncher.launch(signInIntent);
         });
+
+        //Login check
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            //Hide login button, show Logout
+            //root.findViewById(R.id.buttonHomeSignIn);
+            buttonLoginIn.setVisibility(View.INVISIBLE);
+        } else {
+            // No user is signed in
+            //Show login button, hide Logout
+            buttonLoginIn.setVisibility(View.VISIBLE);
+        }
 
         return root;
     }
@@ -96,6 +115,7 @@ public class HomeFragment extends Fragment {
                                 "User ID: " + user.getUid() + "\n" +
                                 "Display Name: " + user.getDisplayName() + "\n"
                 );
+                buttonLoginIn.setVisibility(View.INVISIBLE);
             }
         } else {
             if(response == null) {
@@ -104,6 +124,7 @@ public class HomeFragment extends Fragment {
                 System.out.println("Sign in failed");
                 System.out.println(Objects.requireNonNull(response.getError()).getErrorCode());
             }
+            buttonLoginIn.setVisibility(View.VISIBLE);
         }
     }
 
