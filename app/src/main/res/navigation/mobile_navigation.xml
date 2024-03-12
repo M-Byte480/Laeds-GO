@@ -9,7 +9,11 @@
         android:id="@+id/messages"
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.messages.MessagesFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_messages" />
+        tools:layout="@layout/fragment_messages"
+    <action
+        android:id="@+id/action_navigation_home_to_postsFragment2"
+        app:destination="@id/postsFragment" />
+        />
 
     <fragment
         android:id="@+id/forum"
@@ -38,4 +42,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.posts.PostsFragment"
+        android:label="post_item_list"
+        tools:layout="@layout/post_item_list" />
 </navigation>
