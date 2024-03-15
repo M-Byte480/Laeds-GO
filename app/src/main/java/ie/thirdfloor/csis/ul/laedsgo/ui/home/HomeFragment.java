@@ -16,6 +16,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -35,7 +37,9 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    private Button buttonLoginIn;
+    private Button buttonLogIn;
+    private Button buttonLogout;
+    private FirebaseUser currentUser;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,9 +55,32 @@ public class HomeFragment extends Fragment {
         //Force logout user for testing
         FirebaseAuth.getInstance().signOut();
 
+        //Grabbing button ids
+        buttonLogout = (Button) root.findViewById(R.id.buttonHomeLogout);
+        buttonLogIn = (Button) root.findViewById(R.id.buttonHomeSignIn);
+
+        //Check for user to display correct button
+        userLogInStatus();
+
+        //Logout eventListener
+        buttonLogout.setOnClickListener(V -> {
+            System.out.println("Logout clicked");
+            FirebaseAuth.getInstance().signOut();
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_home);
+            Toast.makeText(getContext(), "User " + currentUser.getEmail() + " was signed out", Toast.LENGTH_SHORT).show();
+            //Check if there is a user
+            //Need to get user and this state, cant use data field currentUser
+            try {
+                FirebaseUser logoutCheck = FirebaseAuth.getInstance().getCurrentUser();
+                System.out.println(logoutCheck.getEmail());
+            }catch (NullPointerException e){
+                System.out.println("No user YIPEEEEEE!");
+            }
+        });
+
         //Login eventListener
-        buttonLoginIn = (Button) root.findViewById(R.id.buttonHomeSignIn);
-        buttonLoginIn.setOnClickListener(v -> {
+        buttonLogIn.setOnClickListener(v -> {
             // Your button click logic here
             System.out.println("Sign in clicked");
             // Choose authentication providers
@@ -71,20 +98,30 @@ public class HomeFragment extends Fragment {
             signInLauncher.launch(signInIntent);
         });
 
-        //Login check
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // User is signed in
-            //Hide login button, show Logout
-            //root.findViewById(R.id.buttonHomeSignIn);
-            buttonLoginIn.setVisibility(View.INVISIBLE);
-        } else {
-            // No user is signed in
-            //Show login button, hide Logout
-            buttonLoginIn.setVisibility(View.VISIBLE);
+        return root;
+    }
+    //check if a user is logged in or not
+    public void userLogInStatus(){
+        try {
+            if (currentUser != null) {
+                //User is signed in
+                //Hide login button, show Logout
+                //root.findViewById(R.id.buttonHomeSignIn);
+                buttonLogIn.setVisibility(View.INVISIBLE);
+                buttonLogout.setVisibility(View.VISIBLE);
+            } else {
+            /*Would assume in the future we will have a sign in page
+             so this will need functionality to keep unsigned users on the login page*/
+
+                //No user is signed in
+                //Show login button, hide Logout
+                buttonLogIn.setVisibility(View.VISIBLE);
+                buttonLogout.setVisibility(View.INVISIBLE);
+            }
+        }catch (NullPointerException e){
+            System.out.println("LogIn and Logout button null pointer");
         }
 
-        return root;
     }
 
 
@@ -110,12 +147,13 @@ public class HomeFragment extends Fragment {
             if(user != null){
                 Toast.makeText(getContext(), "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 //Toast.makeText(this, "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 System.out.println(
                         "Signed in as " + user.getEmail() + "\n" +
                                 "User ID: " + user.getUid() + "\n" +
                                 "Display Name: " + user.getDisplayName() + "\n"
                 );
-                buttonLoginIn.setVisibility(View.INVISIBLE);
+                userLogInStatus();
             }
         } else {
             if(response == null) {
@@ -124,7 +162,7 @@ public class HomeFragment extends Fragment {
                 System.out.println("Sign in failed");
                 System.out.println(Objects.requireNonNull(response.getError()).getErrorCode());
             }
-            buttonLoginIn.setVisibility(View.VISIBLE);
+            userLogInStatus();
         }
     }
 
