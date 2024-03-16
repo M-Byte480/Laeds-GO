@@ -1,5 +1,7 @@
 package ie.thirdfloor.csis.ul.laedsgo.entities;
 
+import androidx.annotation.NonNull;
+
 import java.util.UUID;
 
 public class Post {
@@ -51,6 +53,7 @@ public class Post {
         this.location = location;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return content;
