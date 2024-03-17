@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="22dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    >
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:background="#f5f5f5"
     android:columnCount="4"
     android:rowCount="3"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp"
+
     >
+
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="100dp"
@@ -141,7 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="1"
-        android:text="Limerick"
+        android:text="02/05\n12:05"
         android:layout_gravity="center"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginLeft="6dp"
@@ -150,6 +160,28 @@
         />
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_column="2"
+        android:layout_row="1"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Comments"
+            android:src="@android:drawable/btn_star" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="0" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/content2"
@@ -161,10 +193,11 @@
         android:layout_columnWeight="2"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginRight="6dp"
-        android:text="12:03"
+        android:text="Limerick"
         android:layout_gravity="end"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="#0F9D58"
         />
 
 </GridLayout>
+</androidx.cardview.widget.CardView>
