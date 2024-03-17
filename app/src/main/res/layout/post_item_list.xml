@@ -6,9 +6,10 @@
     android:name="ie.thirdfloor.csis.ul.laedsgo.posts.PostsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.posts.PostsFragment"
-    tools:listitem="@layout/post_item"
-    android:background="#000000"/>
+    tools:context=".ui.discovery_posts.PostsFragment"
+    tools:listitem="@layout/post_item">
+
+</androidx.recyclerview.widget.RecyclerView>

@@ -1,4 +1,4 @@
-package ie.thirdfloor.csis.ul.laedsgo.ui.posts.placeholder;
+package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.placeholder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,14 +13,7 @@ import java.util.Map;
  */
 public class PlaceholderContent {
 
-    /**
-     * An array of sample (placeholder) items.
-     */
     public static final List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
-
-    /**
-     * A map of sample (placeholder) items, by ID.
-     */
     public static final Map<String, PlaceholderItem> ITEM_MAP = new HashMap<String, PlaceholderItem>();
 
     private static final int COUNT = 25;

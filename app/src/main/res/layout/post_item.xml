@@ -10,7 +10,7 @@
     android:layout_marginTop="5dp"
     >
 
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -49,7 +49,7 @@
         android:layout_columnWeight="2">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -94,14 +94,13 @@
                     android:src="@android:drawable/btn_star" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/likeCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="2"
                     android:textSize="11sp"
                     android:textColor="#0F9D58"
-
+                    android:text="likes"
                     />
             </LinearLayout>
 
@@ -119,13 +118,13 @@
                     android:src="@android:drawable/btn_star" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/dislikeCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="4"
                     android:textSize="11sp"
                     android:textColor="#0F9D58"
+                    android:text="dislikes"
                     />
             </LinearLayout>
 
@@ -133,31 +132,48 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/username"
         android:layout_width="98dp"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="0"
         android:layout_gravity="center"
-        android:text="Milan Kovacs"
+        android:text="name"
         android:textSize="16sp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="#0F9D58"
         />
 
-    <TextView
-        android:id="@+id/item_number"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="89dp"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="1"
-        android:text="02/05\n12:05"
         android:layout_gravity="center"
         android:layout_margin="@dimen/text_margin"
-        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="#0F9D58"
-        />
+        android:textColor="#0F9D58">
+
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="date" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="time"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#0F9D58" />
+    </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -166,7 +182,7 @@
         android:orientation="vertical"
         android:layout_column="2"
         android:layout_row="1"
-        android:layout_gravity="center">
+        android:layout_gravity="left">
 
         <ImageButton
             android:id="@+id/imageButton3"
@@ -180,24 +196,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="0" />
+            android:text="comments" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/content2"
+        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="2"
         android:layout_columnSpan="2"
         android:layout_columnWeight="2"
+        android:layout_gravity="end"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginRight="6dp"
-        android:text="Limerick"
-        android:layout_gravity="end"
+        android:text="location"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="#0F9D58"
-        />
+        android:textColor="#0F9D58" />
 
 </GridLayout>
 </androidx.cardview.widget.CardView>
