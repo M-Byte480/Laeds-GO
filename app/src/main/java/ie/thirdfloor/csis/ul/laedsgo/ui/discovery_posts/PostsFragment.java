@@ -1,4 +1,4 @@
-package ie.thirdfloor.csis.ul.laedsgo.ui.posts;
+package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
-import ie.thirdfloor.csis.ul.laedsgo.ui.posts.placeholder.PlaceholderContent;
+import ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.placeholder.PlaceholderContent;
 
 /**
  * A fragment representing a list of Items.
@@ -65,7 +65,7 @@ public class PostsFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new PostsRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new PostsRecyclerViewAdapter(DiscoveryPostContent.ITEMS));
         }
         return view;
     }
