@@ -35,16 +35,22 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).getId());
+
         holder.mUsername.setText(mValues.get(position).getUsername());
         holder.mContentView.setText(mValues.get(position).getContent());
         holder.mLocation.setText(mValues.get(position).getLocation());
         holder.mLikes.setText(mValues.get(position).getLikes());
         holder.mDislikes.setText(mValues.get(position).getDislikes());
-        holder.mTime.setText(mValues.get(position).getTime());
 
-//        holder.mContentView.setText(mValues.get(position).getUsername());
+        String[] dateTime = mValues.get(position).getTime().split(" ");
+
+        holder.mDate.setText(dateTime[0]);
+        holder.mTime.setText(dateTime[1]);
+
+        holder.mCommentCount.setText(mValues.get(position).getCommentCount());
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -52,7 +58,6 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-//        public final TextView mIdView;
         public final TextView mContentView;
         public final TextView mUsername;
         public final TextView mLikes;
@@ -61,7 +66,11 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         public boolean mIsDisliked;
         public final TextView mLocation;
         public final TextView mTime;
+        public final TextView mCommentCount;
+        public final TextView mDate;
         public DiscoveryPost mItem;
+
+
 
         public ViewHolder(PostItemBinding binding) {
             super(binding.getRoot());
@@ -71,11 +80,16 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             mUsername = binding.username;
             mTime = binding.time;
             mLocation = binding.location;
+            mCommentCount = binding.comments;
+            mDate = binding.date;
+
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+
+
     }
 }

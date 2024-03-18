@@ -1,5 +1,7 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +53,7 @@ public class DiscoveryPostContent {
     }
 
     private static DiscoveryPost createPost(int p){
+        @SuppressLint("DefaultLocale") String time = String.format("03/05/2023 12:%02d", (int) (Math.random() * 60));
         return new DiscoveryPost(
                 p + "",
                 p + "",
@@ -60,7 +63,7 @@ public class DiscoveryPostContent {
                 false, false,
                 RANDOM_TEXT[ (int) (Math.random() * RTL)],
                 RANDOM_LOCATIONS[ (int) (Math.random() * RLL)],
-                "12:" + (int) (Math.random() * 60));
+                time);
     }
 
     static {

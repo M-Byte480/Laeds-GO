@@ -2,6 +2,8 @@ package ie.thirdfloor.csis.ul.laedsgo.entities;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 public class DiscoveryPost {
 
     private String id;
@@ -17,6 +19,9 @@ public class DiscoveryPost {
     private String location;
 
     private String time;
+
+    private ArrayList<Object> comments;
+    private int commentCount;
 
     public DiscoveryPost(){
 
@@ -71,6 +76,10 @@ public class DiscoveryPost {
 
     public String getLikes(){
         return Integer.toString(likes);
+    }
+
+    public String getCommentCount(){
+        return "0";
     }
 
     public String getDislikes(){

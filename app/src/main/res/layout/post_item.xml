@@ -5,12 +5,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="22dp"
+    app:cardCornerRadius="12dp"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     >
 
-<GridLayout
+
+    <GridLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -36,6 +37,7 @@
             android:contentDescription="userPFP"
             android:src="@drawable/cat"
             android:scaleType="centerCrop"
+            android:onClick="openProfile"
             />
     </androidx.cardview.widget.CardView>
 
@@ -83,7 +85,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <ImageButton
                     android:id="@+id/imageButton"
@@ -91,7 +94,9 @@
                     android:layout_height="48dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="Like Post"
-                    android:src="@android:drawable/btn_star" />
+                    android:background="@drawable/like"
+                    android:onClick="onLikeButtonClick"
+                    />
 
                 <TextView
                     android:id="@+id/likeCount"
@@ -107,15 +112,18 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <ImageButton
                     android:id="@+id/imageButton2"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="Disike Post"
-                    android:src="@android:drawable/btn_star" />
+                    android:contentDescription="Dislike Post"
+                    android:background="@drawable/dislike"
+                    android:onClick="onDislikeButtonClick"
+                    />
 
                 <TextView
                     android:id="@+id/dislikeCount"
@@ -131,46 +139,50 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="98dp"
+
+    <LinearLayout
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="0"
-        android:layout_gravity="center"
-        android:text="name"
-        android:textSize="16sp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="#0F9D58"
-        />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="89dp"
-        android:layout_height="wrap_content"
-        android:layout_row="1"
-        android:layout_column="1"
+        android:layout_columnSpan="2"
+        android:layout_columnWeight="2"
         android:layout_gravity="center"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginStart="6dp"
+        android:orientation="vertical"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="#0F9D58">
 
-
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="date" />
+            android:layout_gravity="center"
+            android:autoSizeTextType="uniform"
+            android:text="name"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#0F9D58"
+            android:textSize="16sp"
+            android:onClick="openProfile"
+            />
 
         <TextView
             android:id="@+id/time"
-            android:layout_width="89dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="time"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="#0F9D58" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="date"
+            android:textColor="#0F9D58" />
+
     </LinearLayout>
 
 
@@ -182,35 +194,45 @@
         android:orientation="vertical"
         android:layout_column="2"
         android:layout_row="1"
-        android:layout_gravity="left">
+        android:layout_gravity="center|start"
+        >
 
         <ImageButton
             android:id="@+id/imageButton3"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:background="@android:color/system_accent2_300"
+            android:clickable="true"
             android:contentDescription="Comments"
-            android:src="@android:drawable/btn_star" />
+            android:foreground="@drawable/chat"
+            android:requiresFadingEdge="vertical"
+            android:onClick="openComments"
+            />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="#0F9D58"
             android:text="comments" />
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/location"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="2"
         android:layout_columnSpan="2"
         android:layout_columnWeight="2"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/text_margin"
-        android:layout_marginRight="6dp"
+        android:layout_gravity="center|end"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="18dp"
         android:text="location"
+        android:textAlignment="center"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="#0F9D58" />
 
