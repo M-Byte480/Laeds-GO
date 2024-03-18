@@ -2,8 +2,12 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.databinding.PostItemBinding;
@@ -51,13 +55,13 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
     }
 
 
-
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = "ViewHolder";
         public final TextView mContentView;
         public final TextView mUsername;
         public final TextView mLikes;
@@ -71,7 +75,6 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
         public DiscoveryPost mItem;
 
 
-
         public ViewHolder(PostItemBinding binding) {
             super(binding.getRoot());
             mContentView = binding.content;
@@ -83,6 +86,62 @@ public class PostsRecyclerViewAdapter extends RecyclerView.Adapter<PostsRecycler
             mCommentCount = binding.comments;
             mDate = binding.date;
 
+            ImageButton likeBtn = binding.likeButton;
+            ImageButton dislikeBtn = binding.dislikeButton;
+            ImageButton commentBtn = binding.commentsButton;
+            ImageView pfp = binding.pfp;
+
+            likeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onLikeButtonClick(v);
+                }
+            });
+
+            dislikeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onDislikeButtonClick(v);
+                }
+            });
+
+            commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openComments(v);
+                }
+            });
+
+            pfp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openProfile(v);
+                }
+            });
+
+            mUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openProfile(v);
+                }
+            });
+
+        }
+
+        public void onLikeButtonClick(View view) {
+            Log.i(TAG, "Like Button Clicked");
+        }
+
+        public void onDislikeButtonClick(View view) {
+            Log.i(TAG, "Dislike Button Clicked");
+        }
+
+        public void openComments(View view) {
+            Log.i(TAG, "Opening Comments");
+        }
+
+        public void openProfile(View view) {
+            Log.i(TAG, "Requesting to view profile");
         }
 
         @Override

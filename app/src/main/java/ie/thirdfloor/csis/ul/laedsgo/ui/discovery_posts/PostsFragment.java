@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.placeholder.PlaceholderContent;
@@ -20,6 +22,7 @@ import ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.placeholder.PlaceholderC
  */
 public class PostsFragment extends Fragment {
 
+    private static final String TAG = "PostsFragment";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -52,7 +55,8 @@ public class PostsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.post_item_list, container, false);
 
@@ -68,5 +72,9 @@ public class PostsFragment extends Fragment {
             recyclerView.setAdapter(new PostsRecyclerViewAdapter(DiscoveryPostContent.ITEMS));
         }
         return view;
+    }
+
+    public void onLikeButtonClick(View view) {
+        Log.i(TAG, "Like Button Clicked");
     }
 }
