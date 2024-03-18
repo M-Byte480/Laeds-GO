@@ -41,19 +41,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void onLikeButtonClick(View view) {
-        Log.i(TAG, "Like Button Clicked");
-    }
-
-    public void onDislikeButtonClick(View view){
-        Log.i(TAG, "Dislike Button Clicked");
-    }
-
-    public void openComments(View view){
-        Log.i(TAG, "Opening Comments");
-    }
-
-    public void openProfile(View view){
-        Log.i(TAG, "Requesting to view profile");
-    }
 }
