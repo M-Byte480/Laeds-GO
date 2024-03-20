@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_home"-->
+<!--        android:icon="@drawable/ic_home_black_24dp"-->
+<!--        android:title="@string/title_home" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_dashboard"-->
+<!--        android:icon="@drawable/ic_dashboard_black_24dp"-->
+<!--        android:title="@string/title_dashboard" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/navigation_notifications"-->
+<!--        android:icon="@drawable/ic_notifications_black_24dp"-->
+<!--        android:title="@string/title_notifications" />-->
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:title="Messages"
+        android:icon="@drawable/baseline_message_24"
+        android:id="@+id/messages"/>
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:title="Forum"
+        android:icon="@drawable/baseline_diversity_3_24"
+        android:id="@+id/forum"/>
 
+    <item
+        android:title="AR"
+        android:icon="@drawable/baseline_catching_pokemon_24"
+        android:id="@+id/ar"/>
+
+    <item
+        android:title="AR Library"
+        android:icon="@drawable/baseline_book_24"
+        android:id="@+id/laed_deck"/>
+
+    <item
+        android:title="Profile"
+        android:icon="@drawable/baseline_edit_24"
+        android:id="@+id/profile"/>
 </menu>
