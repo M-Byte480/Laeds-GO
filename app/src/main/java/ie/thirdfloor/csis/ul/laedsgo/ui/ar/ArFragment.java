@@ -1,4 +1,4 @@
-package ie.thirdfloor.csis.ul.laedsgo.ui.home;
+package ie.thirdfloor.csis.ul.laedsgo.ui.ar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentHomeBinding;
 
-public class HomeFragment extends Fragment {
+import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentArBinding;
 
-    private FragmentHomeBinding binding;
+
+public class ArFragment extends Fragment {
+
+    private FragmentArBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        ArViewModel arViewModel =
+                new ViewModelProvider(this).get(ArViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentArBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textAr;
+        arViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
