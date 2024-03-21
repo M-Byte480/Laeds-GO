@@ -1,5 +1,6 @@
 package ie.thirdfloor.csis.ul.laedsgo.entities;
 
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;

@@ -23,9 +23,9 @@ public class DiscoveryPostContent {
             "WaffleWizard9000"
     };
     public static final String[] RANDOM_TEXT = {
-      "Yo lads just caught a bitch ass Top Mulla-G",
+      "Yo lads just caught a Top Mulla-G",
       "Saw a wild Ruski in the snowy plains!!!",
-      "THe infinity Drug Dealrer is lurking in Limerick City",
+      "THe infinity Dealer is lurking in Limerick City",
       "AYO! Is that THe Fayer Enough in Cedar House?",
       "The Polish Pokem... I mean Lad can be caught in Darkside",
       "Milanonom spotted @Inver_Castletroy"
