@@ -1,6 +1,8 @@
 package ie.thirdfloor.csis.ul.laedsgo;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -15,6 +17,7 @@ import ie.thirdfloor.csis.ul.laedsgo.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +39,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 }

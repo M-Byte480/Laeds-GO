@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/messages">
+    app:startDestination="@+id/ar">
 
     <fragment
         android:id="@+id/messages"
-        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.messages.MessagesFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_messages" />
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostsFragment"
+        android:label="Posts"
+        tools:layout="@layout/post_item_list"
+        />
 
     <fragment
         android:id="@+id/forum"
@@ -38,4 +39,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.profile.ProfileFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/postsFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostsFragment"
+        android:label="post_item_list"
+        tools:layout="@layout/post_item_list" />
 </navigation>
