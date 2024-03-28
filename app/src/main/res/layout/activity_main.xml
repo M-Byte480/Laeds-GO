@@ -30,4 +30,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
+<!--
+    <androidx.fragment.app.FragmentContainerView android:name="com.google.ar.sceneform.ux.ArFragment"
+        android:id="@+id/ux_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+-->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
