@@ -1,7 +1,15 @@
 package ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces;
 
+import androidx.lifecycle.MutableLiveData;
+
+import java.util.ArrayList;
+
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
+
 public interface ICollectionConnection {
     public void push(IDocument item) throws InterruptedException;
 
-    public IDocument get(int id);
+    public void get(int id, MutableLiveData<ProfileDocument> mProfile);
+
+    public void getAll(MutableLiveData<ArrayList<ProfileDocument>> mProfileList);
 }

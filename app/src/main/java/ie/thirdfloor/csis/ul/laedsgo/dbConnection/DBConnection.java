@@ -7,5 +7,6 @@ public class DBConnection {
      public FirebaseFirestore db;
 
      public DBConnection(){
+          db = FirebaseFirestore.getInstance();
      }
 }

@@ -1,14 +1,16 @@
-package ie.thirdfloor.csis.ul.laedsgo.dbConnection;
+package ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile;
+
+import org.checkerframework.checker.interning.qual.CompareToMethod;
 
 import java.util.Date;
 
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class ProfileDocument implements IDocument {
-    public int id;
-    public String name;
-    public int ladsSeen;
-    public int ladsCaught;
+    public int id = 0;
+    public String name = "default";
+    public int ladsSeen = 0;
+    public int ladsCaught = 0;
 
     public Date timestamp;
 

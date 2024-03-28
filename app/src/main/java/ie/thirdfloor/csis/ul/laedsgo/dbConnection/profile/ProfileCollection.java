@@ -1,10 +1,11 @@
-package ie.thirdfloor.csis.ul.laedsgo.dbConnection;
+package ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile;
 
 import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -13,9 +14,11 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.DBConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.ICollectionConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
@@ -23,7 +26,6 @@ public class ProfileCollection implements ICollectionConnection {
 
     DBConnection dbConnection;
     Integer testDocId = 0;
-    private volatile boolean testValotile = false;
 
     public ProfileCollection(DBConnection db){
         dbConnection = db;
@@ -65,25 +67,46 @@ public class ProfileCollection implements ICollectionConnection {
     }
 
     @Override
-    public IDocument get(int id) {
-//        System.out.println("test get");
+    public void get(int id, MutableLiveData<ProfileDocument> mProfile) {
         dbConnection.db.collection("profile")
+                .whereEqualTo("id", id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map dcData = document.getData();
-                                System.out.println(dcData.toString());
+                                ProfileDocument doc = document.toObject(ProfileDocument.class);
+                                mProfile.setValue(doc);
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
-                            System.out.println("Exception: " + task.getException().toString());
                         }
                     }
                 });
-        return null;
+    }
+
+    @Override
+    public void getAll(MutableLiveData<ArrayList<ProfileDocument>> mProfileList) {
+        dbConnection.db.collection("profile")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList<ProfileDocument> arrayList = mProfileList.getValue();
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                ProfileDocument doc = document.toObject(ProfileDocument.class);
+                                arrayList.add(doc);
+                            }
+
+                            mProfileList.setValue(arrayList);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 
     private Map<String, Object> convertDocumentToMap(ProfileDocument document, Integer id) {
