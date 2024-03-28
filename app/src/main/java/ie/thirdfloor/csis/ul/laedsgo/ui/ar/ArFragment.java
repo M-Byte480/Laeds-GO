@@ -1,4 +1,4 @@
-package ie.thirdfloor.csis.ul.laedsgo.ui.home;
+package ie.thirdfloor.csis.ul.laedsgo.ui.ar;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -31,11 +31,12 @@ import java.util.List;
 import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
-import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentHomeBinding;
+import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentArBinding;
 
-public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+public class ArFragment extends Fragment {
+
+    private FragmentArBinding binding;
 
     private Button buttonLogIn;
     private Button buttonLogout;
@@ -43,14 +44,15 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        ArViewModel arViewModel =
+                new ViewModelProvider(this).get(ArViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentArBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textAr;
+        arViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //TODO: OLD MAIN END
 
         //Force logout user for testing
         FirebaseAuth.getInstance().signOut();
@@ -67,10 +69,9 @@ public class HomeFragment extends Fragment {
             System.out.println("Logout clicked");
             FirebaseAuth.getInstance().signOut();
             NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            navController.navigate(R.id.navigation_home);
+            //TODO WILL BE MOVED TO NEW FRAGMENT FROM LOGIN
             Toast.makeText(getContext(), "User " + currentUser.getEmail() + " was signed out", Toast.LENGTH_SHORT).show();
             //Check if there is a user
-            //Need to get user and this state, cant use data field currentUser
             try {
                 FirebaseUser logoutCheck = FirebaseAuth.getInstance().getCurrentUser();
                 System.out.println(logoutCheck.getEmail());
@@ -166,26 +167,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
-    /*public void onClickSignIn(View view) {
-        System.out.println("Sign in clicked");
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-        );
-
-        // Create and launch sign-in intent
-        Intent signInIntent = AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build();
-        signInLauncher.launch(signInIntent);
-    }*/
 }
