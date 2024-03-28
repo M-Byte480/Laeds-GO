@@ -1,4 +1,4 @@
-package ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile;
+package ie.thirdfloor.csis.ul.laedsgo.dbConnection.post;
 
 import static android.content.ContentValues.TAG;
 
@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -22,16 +21,11 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.DBConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.ICollectionConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
-public class ProfileCollection implements ICollectionConnection {
-
-    DBConnection dbConnection;
-    public ProfileCollection(DBConnection db){
-        dbConnection = db;
-    }
-
+public class TOLPostCollection implements ICollectionConnection {
+    private final DBConnection dbConnection = new DBConnection();
     @Override
-    public void push(IDocument item) {
-        dbConnection.db.collection("profile")
+    public void push(IDocument item) throws InterruptedException {
+        dbConnection.db.collection("tolPost")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
@@ -40,10 +34,10 @@ public class ProfileCollection implements ICollectionConnection {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i("test", document.toObject(ProfileDocument.class).toString() + " data in document");
+                                Log.i("test", document.toObject(TOLPostDocument.class).toString() + " data in document");
                                 Integer docId = Integer.parseInt(document.getId()) + 1;
-                                Map<String, Object> map = convertDocumentToMap((ProfileDocument) item, docId);
-                                dbConnection.db.collection("profile")
+                                Map<String, Object> map = convertDocumentToMap((TOLPostDocument) item, docId);
+                                dbConnection.db.collection("tolPost")
                                         .document(docId.toString())
                                         .set(map)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -65,8 +59,8 @@ public class ProfileCollection implements ICollectionConnection {
     }
 
     @Override
-    public void get(int id, MutableLiveData<IDocument> mProfile) {
-        dbConnection.db.collection("profile")
+    public void get(int id, MutableLiveData<IDocument> mTolPost) {
+        dbConnection.db.collection("tolPost")
                 .whereEqualTo("id", id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -74,32 +68,33 @@ public class ProfileCollection implements ICollectionConnection {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ProfileDocument doc = document.toObject(ProfileDocument.class);
-                                mProfile.setValue(doc);
+                                TOLPostDocument doc = document.toObject(TOLPostDocument.class);
+                                mTolPost.setValue(doc);
                             }
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w("test", "Error getting documents.", task.getException());
                         }
                     }
                 });
     }
 
     @Override
-    public void getAll(MutableLiveData<ArrayList<IDocument>> mProfileList) {
-        dbConnection.db.collection("profile")
+    public void getAll(MutableLiveData<ArrayList<IDocument>> mTolPostList) {
+        dbConnection.db.collection("tolPost")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            ArrayList<IDocument> arrayList = mProfileList.getValue();
+                            ArrayList<IDocument> arrayList = mTolPostList.getValue();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ProfileDocument doc = document.toObject(ProfileDocument.class);
+                                TOLPostDocument doc = document.toObject(TOLPostDocument.class);
                                 arrayList.add(doc);
+                                Log.i("test", doc.toString());
                             }
 
-                            mProfileList.setValue(arrayList);
+                            mTolPostList.setValue(arrayList);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
@@ -107,15 +102,17 @@ public class ProfileCollection implements ICollectionConnection {
                 });
     }
 
-    private Map<String, Object> convertDocumentToMap(ProfileDocument document, Integer id) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    private Map<String, Object> convertDocumentToMap(TOLPostDocument item, Integer docId) {
+        Map<String, Object> newDoc = new HashMap<>();
 
-        map.put("id", id);
-        map.put("name", document.name);
-        map.put("ladsSeen", document.ladsSeen);
-        map.put("ladsCaught", document.ladsCaught);
-        map.put("timestamp", Timestamp.now());
+        newDoc.put("id", docId);
+        newDoc.put("userId", item.userId);
+        newDoc.put("likes", item.likes);
+        newDoc.put("dislikes", item.dislikes);
+        newDoc.put("message", item.message);
+        newDoc.put("timestamp", item.timestamp);
+        newDoc.put("location", item.location);
 
-        return map;
+        return newDoc;
     }
 }
