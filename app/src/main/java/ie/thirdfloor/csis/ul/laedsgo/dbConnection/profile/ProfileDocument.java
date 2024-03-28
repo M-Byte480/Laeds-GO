@@ -1,9 +1,6 @@
 package ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile;
 
-import org.checkerframework.checker.interning.qual.CompareToMethod;
-
 import java.util.Date;
-
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class ProfileDocument implements IDocument {
