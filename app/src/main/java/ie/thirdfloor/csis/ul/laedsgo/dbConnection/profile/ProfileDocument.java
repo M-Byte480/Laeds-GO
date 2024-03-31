@@ -8,7 +8,8 @@ public class ProfileDocument implements IDocument {
     public String name = "default";
     public int ladsSeen = 0;
     public int ladsCaught = 0;
-
+    public String profilePhoto = "";
+    public String bio = "";
     public Date timestamp;
 
     @Override
@@ -18,6 +19,9 @@ public class ProfileDocument implements IDocument {
                 ", name='" + name + '\'' +
                 ", ladsSeen=" + ladsSeen +
                 ", ladsCaught=" + ladsCaught +
+                ", profilePhoto='" + profilePhoto + '\'' +
+                ", bio='" + bio + '\'' +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }
