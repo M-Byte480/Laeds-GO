@@ -37,8 +37,8 @@ public class ProfileFragment extends Fragment {
 
         profileCollection = new ProfileCollection();
 
-        MutableLiveData<IDocument> test = profileViewModel.getmProfile();
-        test.observe(getViewLifecycleOwner(), new Observer<IDocument>() {
+        MutableLiveData<IDocument> mProfile = profileViewModel.getmProfile();
+        mProfile.observe(getViewLifecycleOwner(), new Observer<IDocument>() {
             @Override
             public void onChanged(IDocument iDocument) {
                 ProfileDocument profileDocument = (ProfileDocument) iDocument;
@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileCollection.get(0, test);
+        profileCollection.get(0, mProfile);
 
         return root;
     }
