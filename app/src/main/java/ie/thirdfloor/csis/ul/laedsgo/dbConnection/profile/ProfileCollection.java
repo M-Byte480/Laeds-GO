@@ -24,10 +24,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class ProfileCollection implements ICollectionConnection {
 
-    DBConnection dbConnection;
-    public ProfileCollection(DBConnection db){
-        dbConnection = db;
-    }
+    DBConnection dbConnection = new DBConnection();
 
     @Override
     public void push(IDocument item) {
@@ -114,6 +111,8 @@ public class ProfileCollection implements ICollectionConnection {
         map.put("name", document.name);
         map.put("ladsSeen", document.ladsSeen);
         map.put("ladsCaught", document.ladsCaught);
+        map.put("profilePhoto", document.profilePhoto);
+        map.put("bio", document.bio);
         map.put("timestamp", Timestamp.now());
 
         return map;
