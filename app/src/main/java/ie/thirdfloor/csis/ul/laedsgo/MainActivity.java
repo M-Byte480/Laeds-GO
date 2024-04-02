@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,10 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.databinding.ActivityMainBinding;
+import ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private NavHostFragment navHostFragment;
+    private NavController navController;
     private static final String TAG = "MainActivity";
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
@@ -55,9 +59,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the NavController from the NavHostFragment
         assert navHostFragment != null;
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // Hiding navbar on login
+        // Check if the current destination is not the LoginFragment
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.loginFragment) {
+                navView.setVisibility(View.GONE);
+            } else {
+                navView.setVisibility(View.VISIBLE);
+            }
+        });
+        navController.navigate(R.id.loginFragment);
     }
 
     public ActivityResultLauncher<Intent> getSignInLauncher() {
@@ -70,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if(user != null){
-//                Toast.makeText(getContext(), "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(this, "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                // User signed in successfully
                 System.out.println(
                         "Signed in as " + user.getEmail() + "\n" +
                                 "User ID: " + user.getUid() + "\n" +
@@ -79,14 +93,17 @@ public class MainActivity extends AppCompatActivity {
                 );
             }
         } else {
+            // Sign-in failed or cancelled
             if(response == null) {
                 System.out.println("Sign in cancelled");
-            }else {
+            } else {
                 System.out.println("Sign in failed");
                 System.out.println(Objects.requireNonNull(response.getError()).getErrorCode());
             }
         }
+
     }
+
     /*@Override
     public void onClick(View view) {
         System.out.println("Sign in clicked");
