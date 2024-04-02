@@ -1,45 +1,23 @@
 package ie.thirdfloor.csis.ul.laedsgo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.databinding.ActivityMainBinding;
-import ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private NavHostFragment navHostFragment;
     private NavController navController;
     private static final String TAG = "MainActivity";
-
-    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
-    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,35 +51,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         navController.navigate(R.id.loginFragment);
-    }
-
-    public ActivityResultLauncher<Intent> getSignInLauncher() {
-        return signInLauncher;
-    }
-
-    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
-        IdpResponse response = result.getIdpResponse();
-        if (result.getResultCode() == RESULT_OK) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-            if(user != null){
-                // User signed in successfully
-                System.out.println(
-                        "Signed in as " + user.getEmail() + "\n" +
-                                "User ID: " + user.getUid() + "\n" +
-                                "Display Name: " + user.getDisplayName() + "\n"
-                );
-            }
-        } else {
-            // Sign-in failed or cancelled
-            if(response == null) {
-                System.out.println("Sign in cancelled");
-            } else {
-                System.out.println("Sign in failed");
-                System.out.println(Objects.requireNonNull(response.getError()).getErrorCode());
-            }
-        }
-
     }
 
     /*@Override
