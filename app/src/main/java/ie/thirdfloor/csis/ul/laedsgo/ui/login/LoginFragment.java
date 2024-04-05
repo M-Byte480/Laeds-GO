@@ -44,39 +44,14 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        /*return inflater.inflate(R.layout.fragment_login, container, false);
-        View root = binding.getRoot();*/
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        /*final TextView textView = binding.textLogin;
-        arViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
-        //TODO: OLD MAIN END
-        //Force logout user for testing
+
         FirebaseAuth.getInstance().signOut();
 
         //Grabbing button ids
         //Logout button in fragment_profile.xml
         buttonLogIn = (Button) root.findViewById(R.id.signInButton);
-
-        //Check for user to display correct button
-        //userLogInStatus();
-
-        /*//Logout eventListener
-        buttonLogout.setOnClickListener(V -> {
-            System.out.println("Logout clicked");
-            FirebaseAuth.getInstance().signOut();
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-            Toast.makeText(getContext(), "User " + currentUser.getEmail() + " was signed out", Toast.LENGTH_SHORT).show();
-            userLogInStatus();
-            //Check if there is a user
-            try {
-                currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                System.out.println(currentUser.getEmail());
-            } catch (NullPointerException e) {
-                System.out.println("No user YIPEEEEEE!");
-            }
-        });*/
 
         //Login eventListener
         buttonLogIn.setOnClickListener(v -> {
@@ -99,33 +74,6 @@ public class LoginFragment extends Fragment {
 
         return root;
     }
-
-    //check if a user is logged in or not
-    /*public void userLogInStatus() {
-        try {
-            if (currentUser != null) {
-                //User is signed in
-                //Hide login button, show Logout
-                //root.findViewById(R.id.buttonHomeSignIn);
-                //Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
-                buttonLogIn.setVisibility(View.INVISIBLE);
-                buttonLogout.setVisibility(View.VISIBLE);
-            } else {
-            *//*Would assume in the future we will have a sign in page
-             so this will need functionality to keep unsigned users on the login page*//*
-
-                //buttonLogout = (Button) buttonLogIn;
-                //No user is signed in
-                //Show login button, hide Logout
-                buttonLogIn.setVisibility(View.VISIBLE);
-                buttonLogout.setVisibility(View.INVISIBLE);
-            }
-        } catch (NullPointerException e) {
-            System.out.println("LogIn and Logout button null pointer");
-        }
-
-    }*/
-
 
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
@@ -155,7 +103,6 @@ public class LoginFragment extends Fragment {
                                 "User ID: " + user.getUid() + "\n" +
                                 "Display Name: " + user.getDisplayName() + "\n"
                 );
-                //userLogInStatus();
                 Navigation.findNavController(requireView()).navigate(R.id.ar);
 
             }
@@ -166,7 +113,6 @@ public class LoginFragment extends Fragment {
                 System.out.println("Sign in failed");
                 System.out.println(Objects.requireNonNull(response.getError()).getErrorCode());
             }
-            //userLogInStatus();
         }
     }
 
