@@ -64,15 +64,14 @@ public class ProfileFragment extends Fragment {
 
         profileCollection.get(0, mProfile);
 
-        final TextView textView = binding.textProfile;
-        profileViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        Button buttonLogout = root.findViewById(R.id.logoutButton);
+        Button buttonLogout;
+        buttonLogout =binding.logoutButton;
 
         //Logout eventListener
         buttonLogout.setOnClickListener(V -> {
             System.out.println("Logout clicked");
             FirebaseAuth.getInstance().signOut();
-            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
+            /*NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);*/
             Toast.makeText(getContext(), "User " + currentUser.getEmail() + " was signed out", Toast.LENGTH_SHORT).show();
             //Check if there is a user
             Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
