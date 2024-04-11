@@ -4,16 +4,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ProfileViewModel extends ViewModel {
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 
-    private final MutableLiveData<String> mText;
+public class ProfileViewModel extends ViewModel {
+    private final MutableLiveData<IDocument> mProfile;
 
     public ProfileViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mProfile = new MutableLiveData<>(new ProfileDocument());
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<IDocument> getmProfile() {
+        return mProfile;
     }
 }

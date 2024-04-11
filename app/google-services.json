@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "418359748125",
+    "project_id": "laeds-go",
+    "storage_bucket": "laeds-go.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:418359748125:android:806fad19c4fc9047e548f4",
+        "android_client_info": {
+          "package_name": "ie.thirdfloor.csis.ul.laedsgo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "418359748125-ol9ej3c7dqtaa2s84fcdn48jno6qsipm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ie.thirdfloor.csis.ul.laedsgo",
+            "certificate_hash": "a313288b3caa56210896a8a1140f778c94d37fab"
+          }
+        },
+        {
+          "client_id": "418359748125-luda168uipqee98h4mqanhg0mvfvje0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTrOZjqjAdlHR8MAzwS746dopGSA1n2Do"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "418359748125-luda168uipqee98h4mqanhg0mvfvje0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
