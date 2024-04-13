@@ -3,22 +3,23 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
-import ie.thirdfloor.csis.ul.laedsgo.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.MyPostViewHolder> {
@@ -40,6 +41,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     public void setArray(ArrayList<DiscoveryPostModel> array){
         this.postModels = array;
     }
+    public static final String TAG = "PostRecyclerViewAdapter";
 
     @Override
     public MyPostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,8 +59,10 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // view as they are coming onto the screen based on their index
         // IN THE RECYCLE VIEW
 
+        // Model from the array
         DiscoveryPostModel model = postModels.get(position);
 
+        // Simple binding
         holder.tvName.setText(model.getUsername());
         holder.tvLocation.setText(model.getLocation());
         holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
@@ -71,8 +75,33 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.tvTime.setText(dateTime[0]);
         holder.tvDate.setText(dateTime[1]);
 
-        // Todo: setup the pfp
-//        holder.profilePicture
+        // Button Setups
+        if(model.isLiked()){
+            holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+        }else{
+            holder.ibLike.setBackgroundResource(R.drawable.like);
+        }
+
+
+        if(model.isDisliked()){
+            holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+        }else{
+            holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+        }
+
+        holder.ibComment.setBackgroundResource(R.drawable.chat);
+
+        // button actions setup
+        holder.ibLike.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.i(TAG, "onClick: " + model.getId());
+                model.setLiked(!model.isLiked());
+                Log.i(TAG, "onClick: " + model.isLiked());
+
+
+            }
+        });
 
     }
 
@@ -90,10 +119,15 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         ImageView profilePicture;
         TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount;
 
+        ImageButton ibLike, ibDislike, ibComment;
+
         public MyPostViewHolder(View rowView) {
             super(rowView);
 
+            // ImageView
             profilePicture = rowView.findViewById(R.id.pfp);
+
+            // TextViews
             tvContent = rowView.findViewById(R.id.content);
             tvName = rowView.findViewById(R.id.username);
             tvLikeCount = rowView.findViewById(R.id.likeCount);
@@ -101,13 +135,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             tvLocation = rowView.findViewById(R.id.location);
             tvTime = rowView.findViewById(R.id.time);
             tvDate = rowView.findViewById(R.id.date);
+
+            // Buttons
+            ibLike = rowView.findViewById(R.id.likeButton);
+            ibDislike = rowView.findViewById(R.id.dislikeButton);
+            ibComment = rowView.findViewById(R.id.commentsButton);
         }
 
-//        public MyPostViewHolder(ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentPostRowBinding binding) {
-//            super(binding.getRoot());
-//            mIdView = binding.username;
-//            mContentView = binding.content;
-//        }
 
         @Override
         public String toString() {
