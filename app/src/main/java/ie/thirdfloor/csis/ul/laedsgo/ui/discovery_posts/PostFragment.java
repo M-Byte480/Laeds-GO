@@ -1,12 +1,10 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -26,7 +24,6 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
-import ie.thirdfloor.csis.ul.laedsgo.placeholder.PlaceholderContent;
 
 /**
  * A fragment representing a list of Items.
@@ -103,27 +100,10 @@ public class PostFragment extends Fragment {
             }
         });
 
-        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            // todo: uncomment this
-////            recyclerView.setAdapter(new PostRecyclerViewAdapter(PlaceholderContent.ITEMS));
-//        }
         return view;
     }
 
     private void setupPostsModels(View view, LayoutInflater inflater){
-//        for (int i = 0; i < 35; i++) {
-//            this.postsModels.add(new DiscoveryPostModel(String.valueOf(i), String.valueOf(i),String.valueOf(i),
-//                    i, i, false, false, String.valueOf(i), String.valueOf(i), String.valueOf(i) + " ahahahah"));
-//        }
-
-
         elements.observe(getViewLifecycleOwner(), new Observer<ArrayList<IDocument>>() {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
@@ -139,7 +119,6 @@ public class PostFragment extends Fragment {
 
                 discoveryPosts.sort(Collections.reverseOrder());
 
-                //Todo: figure out where this goes
                 recyclerView = view.findViewById(R.id.postsRecyclerViewList);
                 adapter.clearArray();
                 adapter.setArray(discoveryPosts);
@@ -156,9 +135,6 @@ public class PostFragment extends Fragment {
     }
 
     private static DiscoveryPostModel createPost(TOLPostDocument p) {
-
-        // Query for username
-        // Query for is this user liked this post or disliked or none
 
         return new DiscoveryPostModel(
                 String.valueOf(p.id),
