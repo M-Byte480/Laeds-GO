@@ -137,7 +137,7 @@ public class PostFragment extends Fragment {
     private static DiscoveryPostModel createPost(TOLPostDocument p) {
 
         return new DiscoveryPostModel(
-                String.valueOf(p.id),
+                p.id,
                 String.valueOf(p.userId),
                 String.valueOf(p.userId),
                 p.likes,
