@@ -1,5 +1,6 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -12,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 
 import java.util.ArrayList;
@@ -30,11 +33,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private ProfileCollection profileCollection = new ProfileCollection();
 
     private int USER_ID;
+    private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
 
     public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
         this.postModels = items;
         this.context = contenxt;
         this.USER_ID = profileCollection.getUserId();
+        profileCollection.get(USER_ID, loggedInUser);
     }
 
     public void clearArray(){
@@ -117,6 +122,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
                 }else{
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+                }
+
+                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+                if(accountState != null){
+                    accountState.likedPosts.add(model.getId());
+                    profileCollection.update(loggedInUser);
                 }
             }
         });
