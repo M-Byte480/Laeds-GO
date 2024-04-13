@@ -20,6 +20,7 @@ import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -84,6 +85,17 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.tvDate.setText(dateTime[1]);
 
         // Button Setups
+
+        //Check if user has previously liked the post:
+        ArrayList<Integer> likedPosts = ((ProfileDocument) Objects.requireNonNull(loggedInUser.getValue())).likedPosts;
+        ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
+
+        if(likedPosts.contains(model.getId())){
+            model.setLiked();
+        } else if (dislikedPosts.contains(model.getId())) {
+            model.setDisliked();
+        }
+
         if(model.isLiked()){
             holder.ibLike.setBackgroundResource(R.drawable.colour_like);
         }else{
@@ -105,12 +117,17 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibLike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+
                 Log.i(TAG, "onClick: " + model.getId());
                 model.setLiked(!model.isLiked());
                 Log.i(TAG, "onClick: " + model.isLiked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setLiked();
+
+                    accountState.dislikedPosts.remove(model.getId());
+
                 }
 
                 if(model.isLiked()){
@@ -124,9 +141,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
                 }
 
-                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
                 if(accountState != null){
-                    accountState.likedPosts.add(model.getId());
+                    if(accountState.likedPosts.contains(model.getId())){
+                        accountState.likedPosts.remove(model.getId());
+                    }else{
+                        accountState.likedPosts.add(model.getId());
+                    }
                     profileCollection.update(loggedInUser);
                 }
             }
@@ -136,12 +156,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibDislike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+
                 Log.i(TAG, "onClick: " + model.getId());
                 model.setDisliked(!model.isDisliked());
                 Log.i(TAG, "onClick: " + model.isDisliked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setDisliked();
+
+                    accountState.likedPosts.remove(model.getId());
                 }
 
                 if(model.isDisliked()){
@@ -153,6 +177,15 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     holder.ibLike.setBackgroundResource(R.drawable.colour_like);
                 }else{
                     holder.ibLike.setBackgroundResource(R.drawable.like);
+                }
+
+                if(accountState != null){
+                    if(accountState.dislikedPosts.contains(model.getId())){
+                        accountState.dislikedPosts.remove(model.getId());
+                    }else{
+                        accountState.dislikedPosts.add(model.getId());
+                    }
+                    profileCollection.update(loggedInUser);
                 }
             }
         });
