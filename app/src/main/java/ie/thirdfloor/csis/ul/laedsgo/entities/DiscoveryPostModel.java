@@ -42,6 +42,19 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
     }
 
 
+    public boolean checkIfPostIsLikedAndDisliked(){
+        return isLiked && isDisliked;
+    }
+
+    public void setLiked(){
+        isLiked = true;
+        isDisliked = false;
+    }
+
+    public void setDisliked(){
+        isLiked = false;
+        isDisliked = true;
+    }
 
     @NonNull
     @Override

@@ -93,7 +93,6 @@
                         android:layout_height="48dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="Like Post"
-                        android:background="@drawable/like"
                         />
 
                     <TextView
@@ -119,7 +118,6 @@
                         android:layout_height="48dp"
                         android:adjustViewBounds="true"
                         android:contentDescription="Dislike Post"
-                        android:background="@drawable/dislike"
                         />
 
                     <TextView
@@ -197,10 +195,8 @@
                 android:id="@+id/commentsButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@android:color/system_accent2_300"
                 android:clickable="true"
                 android:contentDescription="Comments"
-                android:foreground="@drawable/chat"
                 android:requiresFadingEdge="vertical"
                 />
 
