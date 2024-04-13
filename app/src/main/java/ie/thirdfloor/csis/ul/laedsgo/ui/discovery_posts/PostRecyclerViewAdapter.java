@@ -92,6 +92,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibComment.setBackgroundResource(R.drawable.chat);
 
         // button actions setup
+
+        // Like
         holder.ibLike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -99,10 +101,55 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 model.setLiked(!model.isLiked());
                 Log.i(TAG, "onClick: " + model.isLiked());
 
+                if(model.checkIfPostIsLikedAndDisliked()){
+                    model.setLiked();
+                }
 
+                if(model.isLiked()){
+                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+                }else{
+                    holder.ibLike.setBackgroundResource(R.drawable.like);
+                }
+                if(model.isDisliked()){
+                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+                }else{
+                    holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+                }
             }
         });
 
+        // Dislike
+        holder.ibDislike.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Log.i(TAG, "onClick: " + model.getId());
+                model.setDisliked(!model.isDisliked());
+                Log.i(TAG, "onClick: " + model.isDisliked());
+
+                if(model.checkIfPostIsLikedAndDisliked()){
+                    model.setDisliked();
+                }
+
+                if(model.isDisliked()){
+                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+                }else{
+                    holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+                }
+                if(model.isLiked()){
+                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+                }else{
+                    holder.ibLike.setBackgroundResource(R.drawable.like);
+                }
+            }
+        });
+
+        // Comment
+        holder.ibComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: Comments");
+            }
+        });
     }
 
     @Override
