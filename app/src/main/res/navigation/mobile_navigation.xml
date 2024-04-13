@@ -45,4 +45,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostsFragment"
         android:label="post_item_list"
         tools:layout="@layout/post_item_list" />
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
 </navigation>
