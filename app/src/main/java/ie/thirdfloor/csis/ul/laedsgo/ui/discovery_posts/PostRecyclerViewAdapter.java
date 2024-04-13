@@ -131,15 +131,17 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     accountState.dislikedPosts.remove(model.getId());
                     postCollection.incrementDislike(model.getId(), -1);
                     postCollection.incrementLike(model.getId(), 1);
-
+                    model.decrementDislikes();
                 }
 
                 if(model.isLiked()){
                     holder.ibLike.setBackgroundResource(R.drawable.colour_like);
                     postCollection.incrementLike(model.getId(), 1);
+                    model.incrementLikes();
                 }else{
                     holder.ibLike.setBackgroundResource(R.drawable.like);
                     postCollection.incrementLike(model.getId(), -1);
+                    model.decrementLikes();
                 }
                 if(model.isDisliked()){
                     holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
@@ -156,6 +158,10 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     }
                     profileCollection.update(loggedInUser);
                 }
+
+                // Update Counters
+                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
             }
         });
 
@@ -175,15 +181,20 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     accountState.likedPosts.remove(model.getId());
                     postCollection.incrementDislike(model.getId(), 1);
                     postCollection.incrementLike(model.getId(), -1);
+
+                    model.decrementLikes();
                 }
 
                 if(model.isDisliked()){
                     holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
                     postCollection.incrementDislike(model.getId(), 1);
+                    model.incremenetDislikes();
+
 
                 }else{
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
                     postCollection.incrementDislike(model.getId(), -1);
+                    model.decrementDislikes();
 
                 }
                 if(model.isLiked()){
@@ -200,6 +211,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     }
                     profileCollection.update(loggedInUser);
                 }
+
+
+                // Update Counters
+                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
             }
         });
 
@@ -210,6 +226,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 Log.i(TAG, "onClick: Comments");
             }
         });
+
+
     }
 
     @Override

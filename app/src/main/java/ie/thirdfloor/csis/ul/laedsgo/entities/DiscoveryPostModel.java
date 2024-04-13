@@ -158,6 +158,21 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
         this.commentCount = commentCount;
     }
 
+    public void incrementLikes(){
+        this.likes++;
+    }
+
+    public void decrementLikes(){
+        this.likes--;
+    }
+
+    public void incremenetDislikes(){
+        this.dislikes++;
+    }
+
+    public void decrementDislikes(){
+        this.dislikes--;
+    }
     @Override
     public int compareTo(DiscoveryPostModel that) {
         return Integer.compare(
