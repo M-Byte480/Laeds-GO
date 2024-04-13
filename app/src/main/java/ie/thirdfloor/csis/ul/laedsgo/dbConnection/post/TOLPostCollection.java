@@ -23,6 +23,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class TOLPostCollection implements ICollectionConnection {
     private final DBConnection dbConnection = new DBConnection();
+    private static final String TAG = "TOLPostsCollection.java";
     @Override
     public void push(IDocument item) throws InterruptedException {
         dbConnection.db.collection("tolPost")
@@ -34,7 +35,7 @@ public class TOLPostCollection implements ICollectionConnection {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i("test", document.toObject(TOLPostDocument.class).toString() + " data in document");
+                                Log.i(TAG, document.toObject(TOLPostDocument.class).toString() + " data in document");
                                 Integer docId = Integer.parseInt(document.getId()) + 1;
                                 Map<String, Object> map = convertDocumentToMap((TOLPostDocument) item, docId);
                                 dbConnection.db.collection("tolPost")
@@ -86,12 +87,12 @@ public class TOLPostCollection implements ICollectionConnection {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            ArrayList<IDocument> arrayList = mTolPostList.getValue();
+                            ArrayList<IDocument> arrayList = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 TOLPostDocument doc = document.toObject(TOLPostDocument.class);
                                 arrayList.add(doc);
-                                Log.i("test", doc.toString());
+                                Log.i(TAG, doc.toString());
                             }
 
                             mTolPostList.setValue(arrayList);
