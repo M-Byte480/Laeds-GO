@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -101,6 +102,18 @@ public class TOLPostCollection implements ICollectionConnection {
                         }
                     }
                 });
+    }
+
+    public void incrementLike(Integer id, Integer incr){
+        dbConnection.db.collection("tolPost")
+                .document(String.valueOf(id))
+                .update("likes", FieldValue.increment(incr));
+    }
+
+    public void incrementDislike(Integer id, Integer incr){
+        dbConnection.db.collection("tolPost")
+                .document(String.valueOf(id))
+                .update("dislikes", FieldValue.increment(incr));
     }
 
     private Map<String, Object> convertDocumentToMap(TOLPostDocument item, Integer docId) {
