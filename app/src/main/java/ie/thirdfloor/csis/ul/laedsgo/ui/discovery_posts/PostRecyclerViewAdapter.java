@@ -29,9 +29,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     private ProfileCollection profileCollection = new ProfileCollection();
 
+    private int USER_ID;
+
     public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
         this.postModels = items;
         this.context = contenxt;
+        this.USER_ID = profileCollection.getUserId();
     }
 
     public void clearArray(){
