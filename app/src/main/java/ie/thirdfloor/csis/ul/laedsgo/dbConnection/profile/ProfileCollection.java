@@ -114,6 +114,8 @@ public class ProfileCollection implements ICollectionConnection {
         map.put("profilePhoto", document.profilePhoto);
         map.put("bio", document.bio);
         map.put("timestamp", Timestamp.now());
+        map.put("likedPosts", document.likedPosts);
+        map.put("dislikedPosts", document.dislikedPosts);
 
         return map;
     }
