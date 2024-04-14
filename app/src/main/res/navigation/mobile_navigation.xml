@@ -35,7 +35,7 @@
         android:id="@+id/postsFragment"
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostFragment"
         android:label="post_item_list"
-        tools:layout="@layout/post_item_list" />
+        tools:layout="@layout/fragment_post_list" />
     <fragment
         android:id="@+id/maps"
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.maps.MapsFragment"
@@ -53,4 +53,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_view_profile" />
 </navigation>
