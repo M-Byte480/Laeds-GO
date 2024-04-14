@@ -14,9 +14,9 @@
         android:id="@+id/forum"/>
 
     <item
-        android:title="AR"
+        android:title="Maps"
         android:icon="@drawable/baseline_catching_pokemon_24"
-        android:id="@+id/ar"/>
+        android:id="@+id/maps"/>
 
     <item
         android:title="AR Library"
