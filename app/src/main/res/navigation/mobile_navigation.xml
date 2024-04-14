@@ -49,6 +49,12 @@
         tools:layout="@layout/fragment_post_entry" />
 
     <fragment
+        android:id="@+id/maps"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.maps.MapsFragment"
+        android:label="Maps"
+        tools:layout="@layout/fragment_maps" />
+
+    <fragment
         android:id="@+id/loginFragment"
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
         android:label="Login"
