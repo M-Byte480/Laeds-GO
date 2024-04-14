@@ -1,5 +1,10 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +44,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private int USER_ID;
     private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
     private static TOLPostCollection postCollection = new TOLPostCollection();
+
+    private static CommentConnection commentCollection = new CommentConnection();
 
     public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
         this.postModels = items;
@@ -224,11 +233,34 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: Comments");
+                int postId = model.getId();
+                MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
+                // commentCollection.getAllCommentsByParentId(postId, comments);
+
+                // todo: Inject the info into the comments fragment
+                //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
             }
         });
 
+        // Profile Picture click
+        holder.profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ProfilePicture");
 
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+
+                transaction.replace(R.id.discoveryPostsRootFragment, ViewProfileFragment.newInstance());
+                transaction.addToBackStack("viewProfileTransaction");
+                transaction.commit();
+
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
