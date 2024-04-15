@@ -104,6 +104,10 @@ public class ProfileCollection implements ICollectionConnection {
                 });
     }
 
+    public int getUserId(){
+        return 0;
+    }
+
     private Map<String, Object> convertDocumentToMap(ProfileDocument document, Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();
 
