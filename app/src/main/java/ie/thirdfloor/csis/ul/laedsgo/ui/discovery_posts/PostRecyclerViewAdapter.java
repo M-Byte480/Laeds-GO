@@ -1,5 +1,8 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,15 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -34,15 +38,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     private ProfileCollection profileCollection = new ProfileCollection();
 
-    private int USER_ID;
     private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
     private static TOLPostCollection postCollection = new TOLPostCollection();
 
-    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
+    private static CommentConnection commentCollection = new CommentConnection();
+
+    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
         this.postModels = items;
         this.context = contenxt;
-        this.USER_ID = profileCollection.getUserId();
-        profileCollection.get(USER_ID, loggedInUser);
+        this.loggedInUser = loggedInUser;
+
     }
 
     public void clearArray(){
@@ -59,7 +64,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Inflate view: parse the XML and apply the binding.
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.fragment_post_row, parent, false);
-//        return new ViewHolder(ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+
 
         return new MyPostViewHolder(view);
     }
@@ -89,7 +94,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Button Setups
 
         //Check if user has previously liked the post:
-        ArrayList<Integer> likedPosts = ((ProfileDocument) Objects.requireNonNull(loggedInUser.getValue())).likedPosts;
+        ArrayList<Integer> likedPosts = ((ProfileDocument) loggedInUser.getValue()).likedPosts;
         ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
 
         if(likedPosts.contains(model.getId())){
@@ -130,7 +135,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
                     accountState.dislikedPosts.remove(model.getId());
                     postCollection.incrementDislike(model.getId(), -1);
-                    postCollection.incrementLike(model.getId(), 1);
                     model.decrementDislikes();
                 }
 
@@ -179,7 +183,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     model.setDisliked();
 
                     accountState.likedPosts.remove(model.getId());
-                    postCollection.incrementDislike(model.getId(), 1);
                     postCollection.incrementLike(model.getId(), -1);
 
                     model.decrementLikes();
@@ -224,11 +227,34 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: Comments");
+                int postId = model.getId();
+                MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
+                // commentCollection.getAllCommentsByParentId(postId, comments);
+
+                // todo: Inject the info into the comments fragment
+                //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
             }
         });
 
+        // Profile Picture click
+        holder.profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ProfilePicture");
 
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+
+                transaction.replace(R.id.discoveryPostsRootFragment, ViewProfileFragment.newInstance());
+                transaction.addToBackStack("viewProfileTransaction");
+                transaction.commit();
+
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
