@@ -1,9 +1,7 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTabHost;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +26,6 @@ import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -41,17 +38,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     private ProfileCollection profileCollection = new ProfileCollection();
 
-    private int USER_ID;
     private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
     private static TOLPostCollection postCollection = new TOLPostCollection();
 
     private static CommentConnection commentCollection = new CommentConnection();
 
-    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
+    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
         this.postModels = items;
         this.context = contenxt;
-        this.USER_ID = profileCollection.getUserId();
-        profileCollection.get(USER_ID, loggedInUser);
+        this.loggedInUser = loggedInUser;
+
     }
 
     public void clearArray(){
@@ -68,7 +64,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Inflate view: parse the XML and apply the binding.
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.fragment_post_row, parent, false);
-//        return new ViewHolder(ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+
 
         return new MyPostViewHolder(view);
     }
@@ -98,7 +94,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Button Setups
 
         //Check if user has previously liked the post:
-        ArrayList<Integer> likedPosts = ((ProfileDocument) Objects.requireNonNull(loggedInUser.getValue())).likedPosts;
+        ArrayList<Integer> likedPosts = ((ProfileDocument) loggedInUser.getValue()).likedPosts;
         ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
 
         if(likedPosts.contains(model.getId())){
