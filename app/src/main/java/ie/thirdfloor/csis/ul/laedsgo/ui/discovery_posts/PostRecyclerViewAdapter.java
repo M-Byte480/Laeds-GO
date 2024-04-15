@@ -135,7 +135,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
                     accountState.dislikedPosts.remove(model.getId());
                     postCollection.incrementDislike(model.getId(), -1);
-                    postCollection.incrementLike(model.getId(), 1);
                     model.decrementDislikes();
                 }
 
@@ -184,7 +183,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     model.setDisliked();
 
                     accountState.likedPosts.remove(model.getId());
-                    postCollection.incrementDislike(model.getId(), 1);
                     postCollection.incrementLike(model.getId(), -1);
 
                     model.decrementLikes();
