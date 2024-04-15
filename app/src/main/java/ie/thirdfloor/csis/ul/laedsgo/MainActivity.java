@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
         // Hiding navbar on login
         // Check if the current destination is not the LoginFragment
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {

@@ -95,7 +95,7 @@ public class PostEntryFragment extends Fragment {
 
                     Toast.makeText(getContext(), "Successfully Published", Toast.LENGTH_LONG).show();
 
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 }else{
                     Toast.makeText(getContext(), "There is not enough content to post", Toast.LENGTH_LONG).show();
                 }

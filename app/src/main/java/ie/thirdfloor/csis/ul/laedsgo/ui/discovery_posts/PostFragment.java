@@ -23,6 +23,7 @@ import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostDocument;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 
 /**
@@ -39,8 +40,12 @@ public class PostFragment extends Fragment {
     ArrayList<DiscoveryPostModel> postsModels = new ArrayList<>();
     private static TOLPostCollection dbConnection = new TOLPostCollection();
 
+    public MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
     private MutableLiveData<ArrayList<IDocument>> elements = new MutableLiveData<>(new ArrayList<>());
     private SwipeRefreshLayout postFragmentSwipeRefreshLayout;
+    private ProfileCollection profileCollection = new ProfileCollection();
+
+    private int USER_ID;
 
     RecyclerView recyclerView;
     /**
@@ -63,9 +68,14 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        this.USER_ID = profileCollection.getUserId();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+
+        if(savedInstanceState != null){
+            Log.i(TAG, "onViewCreated: savedInstance");
         }
     }
 
@@ -75,8 +85,9 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         recyclerView = view.findViewById(R.id.postsRecyclerViewList);
         setupPostsModels(view, inflater);
-
-        this.adapter = new PostRecyclerViewAdapter(getContext(), postsModels);
+        Log.i(TAG, "onCreateView: before adapter");
+        profileCollection.get(USER_ID, loggedInUser);
+        this.adapter = new PostRecyclerViewAdapter(getContext(), postsModels, loggedInUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
@@ -108,7 +119,7 @@ public class PostFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
                 ArrayList<DiscoveryPostModel> discoveryPosts = new ArrayList<>();
-
+                Log.i(TAG, "onChanged: ");
                 for (IDocument iDocument : iDocuments) {
                     TOLPostDocument post = (TOLPostDocument) iDocument;
 
@@ -137,7 +148,7 @@ public class PostFragment extends Fragment {
     private static DiscoveryPostModel createPost(TOLPostDocument p) {
 
         return new DiscoveryPostModel(
-                String.valueOf(p.id),
+                p.id,
                 String.valueOf(p.userId),
                 String.valueOf(p.userId),
                 p.likes,

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
 
-    private String id;
+    private Integer id;
     private String userId;
     private String username;
     private int likes;
@@ -28,7 +28,7 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
 
     }
 
-    public DiscoveryPostModel(String id, String userId, String username, int likes, int dislikes, boolean isLiked, boolean isDisliked, String content, String location, String time) {
+    public DiscoveryPostModel(Integer id, String userId, String username, int likes, int dislikes, boolean isLiked, boolean isDisliked, String content, String location, String time) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -62,11 +62,11 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
         return username;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -158,11 +158,26 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
         this.commentCount = commentCount;
     }
 
+    public void incrementLikes(){
+        this.likes++;
+    }
+
+    public void decrementLikes(){
+        this.likes--;
+    }
+
+    public void incremenetDislikes(){
+        this.dislikes++;
+    }
+
+    public void decrementDislikes(){
+        this.dislikes--;
+    }
     @Override
     public int compareTo(DiscoveryPostModel that) {
         return Integer.compare(
-                Integer.parseInt(this.id),
-                Integer.parseInt(that.id)
+                this.id,
+                that.id
         );
     }
 }

@@ -1,5 +1,9 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -12,8 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +38,16 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     private ProfileCollection profileCollection = new ProfileCollection();
 
-    private int USER_ID;
+    private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
+    private static TOLPostCollection postCollection = new TOLPostCollection();
 
-    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items) {
+    private static CommentConnection commentCollection = new CommentConnection();
+
+    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
         this.postModels = items;
         this.context = contenxt;
-        this.USER_ID = profileCollection.getUserId();
+        this.loggedInUser = loggedInUser;
+
     }
 
     public void clearArray(){
@@ -51,7 +64,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Inflate view: parse the XML and apply the binding.
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.fragment_post_row, parent, false);
-//        return new ViewHolder(ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+
 
         return new MyPostViewHolder(view);
     }
@@ -79,6 +92,17 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.tvDate.setText(dateTime[1]);
 
         // Button Setups
+
+        //Check if user has previously liked the post:
+        ArrayList<Integer> likedPosts = ((ProfileDocument) loggedInUser.getValue()).likedPosts;
+        ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
+
+        if(likedPosts.contains(model.getId())){
+            model.setLiked();
+        } else if (dislikedPosts.contains(model.getId())) {
+            model.setDisliked();
+        }
+
         if(model.isLiked()){
             holder.ibLike.setBackgroundResource(R.drawable.colour_like);
         }else{
@@ -100,24 +124,48 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibLike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+
                 Log.i(TAG, "onClick: " + model.getId());
                 model.setLiked(!model.isLiked());
                 Log.i(TAG, "onClick: " + model.isLiked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setLiked();
+
+                    accountState.dislikedPosts.remove(model.getId());
+                    postCollection.incrementDislike(model.getId(), -1);
+                    model.decrementDislikes();
                 }
 
                 if(model.isLiked()){
                     holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+                    postCollection.incrementLike(model.getId(), 1);
+                    model.incrementLikes();
                 }else{
                     holder.ibLike.setBackgroundResource(R.drawable.like);
+                    postCollection.incrementLike(model.getId(), -1);
+                    model.decrementLikes();
                 }
                 if(model.isDisliked()){
                     holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
                 }else{
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
                 }
+
+                if(accountState != null){
+                    if(accountState.likedPosts.contains(model.getId())){
+                        accountState.likedPosts.remove(model.getId());
+                    }else{
+                        accountState.likedPosts.add(model.getId());
+
+                    }
+                    profileCollection.update(loggedInUser);
+                }
+
+                // Update Counters
+                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
             }
         });
 
@@ -125,24 +173,52 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibDislike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+
                 Log.i(TAG, "onClick: " + model.getId());
                 model.setDisliked(!model.isDisliked());
                 Log.i(TAG, "onClick: " + model.isDisliked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setDisliked();
+
+                    accountState.likedPosts.remove(model.getId());
+                    postCollection.incrementLike(model.getId(), -1);
+
+                    model.decrementLikes();
                 }
 
                 if(model.isDisliked()){
                     holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+                    postCollection.incrementDislike(model.getId(), 1);
+                    model.incremenetDislikes();
+
+
                 }else{
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+                    postCollection.incrementDislike(model.getId(), -1);
+                    model.decrementDislikes();
+
                 }
                 if(model.isLiked()){
                     holder.ibLike.setBackgroundResource(R.drawable.colour_like);
                 }else{
                     holder.ibLike.setBackgroundResource(R.drawable.like);
                 }
+
+                if(accountState != null){
+                    if(accountState.dislikedPosts.contains(model.getId())){
+                        accountState.dislikedPosts.remove(model.getId());
+                    }else{
+                        accountState.dislikedPosts.add(model.getId());
+                    }
+                    profileCollection.update(loggedInUser);
+                }
+
+
+                // Update Counters
+                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
             }
         });
 
@@ -151,9 +227,34 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick: Comments");
+                int postId = model.getId();
+                MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
+                // commentCollection.getAllCommentsByParentId(postId, comments);
+
+                // todo: Inject the info into the comments fragment
+                //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
+            }
+        });
+
+        // Profile Picture click
+        holder.profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: ProfilePicture");
+
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+
+                transaction.replace(R.id.discoveryPostsRootFragment, ViewProfileFragment.newInstance());
+                transaction.addToBackStack("viewProfileTransaction");
+                transaction.commit();
+
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
