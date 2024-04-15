@@ -7,10 +7,9 @@
 
     <fragment
         android:id="@+id/messages"
-        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostsFragment"
-        android:label="Posts"
-        tools:layout="@layout/post_item_list"
-        />
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.DiscoveryPostsRoot"
+        android:label="Discovery Posts"
+        tools:layout="@layout/fragment_discovery_posts_root" />
 
     <fragment
         android:id="@+id/forum"
@@ -42,13 +41,25 @@
 
     <fragment
         android:id="@+id/postsFragment"
-        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostsFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostFragment"
         android:label="post_item_list"
-        tools:layout="@layout/post_item_list" />
+        tools:layout="@layout/fragment_post_list" />
+
+    <fragment
+        android:id="@+id/make_post"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts.PostEntryFragment"
+        android:label="Make a Post"
+        tools:layout="@layout/fragment_post_entry" />
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/viewProfileFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_view_profile" />
 </navigation>

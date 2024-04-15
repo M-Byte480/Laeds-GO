@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,6 +24,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class TOLPostCollection implements ICollectionConnection {
     private final DBConnection dbConnection = new DBConnection();
+    private static final String TAG = "TOLPostsCollection.java";
     @Override
     public void push(IDocument item) throws InterruptedException {
         dbConnection.db.collection("tolPost")
@@ -34,7 +36,7 @@ public class TOLPostCollection implements ICollectionConnection {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i("test", document.toObject(TOLPostDocument.class).toString() + " data in document");
+                                Log.i(TAG, document.toObject(TOLPostDocument.class).toString() + " data in document");
                                 Integer docId = Integer.parseInt(document.getId()) + 1;
                                 Map<String, Object> map = convertDocumentToMap((TOLPostDocument) item, docId);
                                 dbConnection.db.collection("tolPost")
@@ -86,12 +88,12 @@ public class TOLPostCollection implements ICollectionConnection {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            ArrayList<IDocument> arrayList = mTolPostList.getValue();
+                            ArrayList<IDocument> arrayList = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 TOLPostDocument doc = document.toObject(TOLPostDocument.class);
                                 arrayList.add(doc);
-                                Log.i("test", doc.toString());
+                                Log.i(TAG, doc.toString());
                             }
 
                             mTolPostList.setValue(arrayList);
@@ -100,6 +102,18 @@ public class TOLPostCollection implements ICollectionConnection {
                         }
                     }
                 });
+    }
+
+    public void incrementLike(Integer id, Integer incr){
+        dbConnection.db.collection("tolPost")
+                .document(String.valueOf(id))
+                .update("likes", FieldValue.increment(incr));
+    }
+
+    public void incrementDislike(Integer id, Integer incr){
+        dbConnection.db.collection("tolPost")
+                .document(String.valueOf(id))
+                .update("dislikes", FieldValue.increment(incr));
     }
 
     private Map<String, Object> convertDocumentToMap(TOLPostDocument item, Integer docId) {

@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
         // Hiding navbar on login
         // Check if the current destination is not the LoginFragment
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {

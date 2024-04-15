@@ -104,6 +104,32 @@ public class ProfileCollection implements ICollectionConnection {
                 });
     }
 
+    public void update(MutableLiveData<IDocument> item) {
+        if (item.getValue() instanceof ProfileDocument) {
+            ProfileDocument profileDocument = (ProfileDocument) item.getValue();
+            dbConnection.db.collection("profile")
+                    .document(String.valueOf(profileDocument.id))
+                    .set(convertDocumentToMap(profileDocument, profileDocument.id))
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.i("test", "Updated document successfully");
+                            } else {
+                                Log.i("test", "Failed to update document");
+                            }
+                        }
+                    });
+        } else {
+            Log.e("test", "Invalid document type for update");
+        }
+    }
+
+
+    public int getUserId(){
+        return 0;
+    }
+
     private Map<String, Object> convertDocumentToMap(ProfileDocument document, Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();
 
