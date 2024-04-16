@@ -103,7 +103,7 @@ public class LoginFragment extends Fragment {
                                 "User ID: " + user.getUid() + "\n" +
                                 "Display Name: " + user.getDisplayName() + "\n"
                 );
-                Navigation.findNavController(requireView()).navigate(R.id.ar);
+                Navigation.findNavController(requireView()).navigate(R.id.maps);
 
             }
         } else {
