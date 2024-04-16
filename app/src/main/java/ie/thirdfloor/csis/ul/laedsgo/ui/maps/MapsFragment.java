@@ -12,6 +12,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.leadsDeck.*;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClickListener {
     private FragmentMapsBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
     private GoogleMap mymap;
@@ -48,6 +51,8 @@ public class MapsFragment extends Fragment {
     private void onMapReady(GoogleMap googleMap) {
         mymap = googleMap;
         mymap.setMyLocationEnabled(true);
+        mymap.setInfoWindowAdapter(new MapsInfoWindowAdaptor(requireContext()));
+        googleMap.setOnInfoWindowClickListener(this);
         if (!markersSet) addLeadsToMap();
         markersSet = true;
     }
@@ -76,8 +81,8 @@ public class MapsFragment extends Fragment {
 
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .position(addNoiseToLocation(user_location))
-                                    .title(lead.name)
-                                    .contentDescription(lead.description);
+                                    .title(String.format("%d. %s",lead.leadId, lead.name))
+                                    .snippet(lead.description);
                             if (lead.picture != null && !lead.picture.isEmpty()) {
                                 byte[] decodedString = Base64.decode(lead.picture, Base64.DEFAULT);
                                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -128,5 +133,10 @@ public class MapsFragment extends Fragment {
         else {
             EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
         }
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+        Log.d("Maps Fragment", "Opening AR fragment");
     }
 }
