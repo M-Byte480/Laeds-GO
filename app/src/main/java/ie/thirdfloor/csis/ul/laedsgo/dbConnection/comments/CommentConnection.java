@@ -15,6 +15,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,6 +106,58 @@ public class CommentConnection implements ICollectionConnection {
                 });
     }
 
+    public void getAllCommentsForPost(MutableLiveData<ArrayList<IDocument>> mCommentsList, int postId) {
+        dbConnection.db.collection("comments")
+                .whereEqualTo("postId", postId)
+                .whereEqualTo("parentId", -1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList comments = new ArrayList<CommentDocument>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                CommentDocument doc = document.toObject(CommentDocument.class);
+                                comments.add(doc);
+                                Log.i("test", doc.toString());
+                            }
+
+                            Collections.sort(comments);
+                            Collections.reverse(comments);
+
+                            mCommentsList.setValue(comments);
+                        } else {
+                            Log.w("test", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getAllReplyComments(MutableLiveData<ArrayList<IDocument>> mCommentsList, int parentId) {
+        dbConnection.db.collection("comments")
+                .whereEqualTo("parentId", parentId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            ArrayList comments = new ArrayList<CommentDocument>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                CommentDocument doc = document.toObject(CommentDocument.class);
+                                comments.add(doc);
+                            }
+
+                            Collections.sort(comments);
+                            Collections.reverse(comments);
+
+                            mCommentsList.setValue(comments);
+                        } else {
+                            Log.w("test", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
     private Map<String, Object> convertDocumentToMap(CommentDocument item, Integer docId) {
         Map<String, Object> newDoc = new HashMap<>();
 
@@ -111,7 +165,7 @@ public class CommentConnection implements ICollectionConnection {
         newDoc.put("userId", item.userId);
         newDoc.put("message", item.message);
         newDoc.put("parentId", item.parentId);
-        newDoc.put("type", item.type);
+        newDoc.put("postId", item.postId);
         newDoc.put("timestamp", Timestamp.now());
 
         return newDoc;
