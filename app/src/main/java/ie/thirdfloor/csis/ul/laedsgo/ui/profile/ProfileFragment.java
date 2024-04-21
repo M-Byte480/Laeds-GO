@@ -64,6 +64,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        if ((ProfileInfo.getId() == 0)) {
+            ProfileInfo.setProfile(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+
         profileCollection.get(ProfileInfo.getId(), mProfile);
 
         Button buttonLogout;

@@ -18,4 +18,8 @@ public class ProfileInfo {
     public static int getId() {
         return ((ProfileDocument)profile.getValue()).id;
     }
+
+    public static MutableLiveData<IDocument> getProfile() {
+        return profile;
+    }
 }

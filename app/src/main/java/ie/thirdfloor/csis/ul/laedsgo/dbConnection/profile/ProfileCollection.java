@@ -171,7 +171,6 @@ public class ProfileCollection implements ICollectionConnection {
                             if (task.getResult().size() != 0) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     ProfileDocument doc = document.toObject(ProfileDocument.class);
-                                    Log.d("Bojo", doc.toString());
                                     mProfile.setValue(doc);
                                 }
                             } else {
@@ -201,7 +200,7 @@ public class ProfileCollection implements ICollectionConnection {
 
     public void updateProfilePicture(int id, String profilePhoto) {
         dbConnection.db.collection("profile").
-                document("" + id).
+                document(Integer.toString(id)).
                 update("profilePhoto", profilePhoto);
     }
 

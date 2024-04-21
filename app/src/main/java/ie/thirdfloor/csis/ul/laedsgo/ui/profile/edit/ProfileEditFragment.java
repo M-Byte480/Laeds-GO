@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -98,6 +100,8 @@ public class ProfileEditFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
+        setDefaultProfilePhoto();
+
         Button gotoProfile = view.findViewById(R.id.cancelBtn);
 
         gotoProfile.setOnClickListener((new View.OnClickListener() {
@@ -146,10 +150,6 @@ public class ProfileEditFragment extends Fragment {
 
             }
         });
-
-        if(savedInstanceState != null){
-            Log.i("Bojo", "onViewCreated: savedInstance");
-        }
     }
 
     @Override
@@ -174,25 +174,35 @@ public class ProfileEditFragment extends Fragment {
                 Bitmap bitmap = null;
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                    // initialize byte stream
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    // compress Bitmap
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    // Initialize byte array
                     byte[] bytes = stream.toByteArray();
-                    // get base64 encoded string
+
                     updatedPhoto = Base64.encodeToString(bytes, Base64.DEFAULT);
-
-                    updatedPhoto.substring(0, (updatedPhoto.length() > 180000) ? 18000 : updatedPhoto.length());
-
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
 
-                ImageView selectProfilePhotoResult = getView().findViewById(R.id.profilePhoto);
-
-                selectProfilePhotoResult.setImageURI(selectedImage);
+                try {
+                    ImageView selectProfilePhotoResult = getView().findViewById(R.id.profilePhoto);
+                    selectProfilePhotoResult.setImageURI(selectedImage);
+                } catch (Exception ex) {
+                    Log.i("see size", ex.getMessage());
+                }
+            } else {
+                setDefaultProfilePhoto();
             }
         }
     }
+
+    private void setDefaultProfilePhoto() {
+        ImageView selectProfilePhotoResult = getView().findViewById(R.id.profilePhoto);
+        ProfileDocument profile = (ProfileDocument) ProfileInfo.getProfile().getValue();
+
+        byte[] decodedString = Base64.decode(profile.profilePhoto, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        selectProfilePhotoResult.setImageBitmap(decodedByte);
+    }
+
 }
