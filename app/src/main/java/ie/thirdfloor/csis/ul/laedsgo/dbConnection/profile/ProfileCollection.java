@@ -187,6 +187,24 @@ public class ProfileCollection implements ICollectionConnection {
                 });
     }
 
+    public void updateUsername(int id, String username) {
+        dbConnection.db.collection("profile").
+                document("" + id).
+                update("name", username);
+    }
+
+    public void updateBio(int id, String bio) {
+        dbConnection.db.collection("profile").
+                document("" + id).
+                update("bio", bio);
+    }
+
+    public void updateProfilePicture(int id, String profilePhoto) {
+        dbConnection.db.collection("profile").
+                document("" + id).
+                update("profilePhoto", profilePhoto);
+    }
+
     public int getUserId(){
         return 0;
     }

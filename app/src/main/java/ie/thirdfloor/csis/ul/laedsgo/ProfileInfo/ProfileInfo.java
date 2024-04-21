@@ -14,4 +14,8 @@ public class ProfileInfo {
 
         profileCollection.getByUID(uid, profile);
     }
+
+    public static int getId() {
+        return ((ProfileDocument)profile.getValue()).id;
+    }
 }
