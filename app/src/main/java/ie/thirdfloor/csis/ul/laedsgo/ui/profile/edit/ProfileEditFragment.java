@@ -136,6 +136,8 @@ public class ProfileEditFragment extends Fragment {
                     collection.updateProfilePicture(ProfileInfo.getId(), updatedPhoto);
                 }
 
+                ProfileInfo.setProfile(((ProfileDocument)(ProfileInfo.getProfile().getValue())).UID);
+
                 Navigation.findNavController(v).navigate(R.id.profile);
             }
         });
