@@ -15,5 +15,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="forum_fragment">Forum Fragment</string>
+
+    <string-array name="cs_name_txt"> <!--just sample text - username will go here most likely -->
+        <item>Sample Name</item>
+    </string-array>
+
+    <string-array name="cs_content_txt"> <!--sample text for comments-->
+
+    </string-array>
+    <string name="title_activity_comment">CommentActivity</string>
+    <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
 </resources>

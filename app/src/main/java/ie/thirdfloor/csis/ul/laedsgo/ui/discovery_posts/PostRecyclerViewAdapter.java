@@ -229,10 +229,10 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 Log.i(TAG, "onClick: Comments");
                 int postId = model.getId();
                 MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
-                // commentCollection.getAllCommentsByParentId(postId, comments);
+                 commentCollection.getAllCommentsForPost(comments, postId);
 
                 // todo: Inject the info into the comments fragment
-                //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
+//                CommentActivity commentsFragment = CommentActivity.newInstance(comments, v);
             }
         });
 
