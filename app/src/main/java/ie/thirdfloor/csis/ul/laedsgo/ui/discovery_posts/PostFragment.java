@@ -156,7 +156,7 @@ public class PostFragment extends Fragment {
                 p.dislikes,
                 false, false,
                 p.message,
-                p.location.get("lan") + ", " + p.location.get("lon"),
+                p.location.get("lat") + ", " + p.location.get("lon"),
                 p.timestamp.toString());
     }
 }

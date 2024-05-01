@@ -125,7 +125,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
-    public void requestLocationPermission() {
+    public void     requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if(EasyPermissions.hasPermissions(requireContext(), perms)) {
             Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT).show();
