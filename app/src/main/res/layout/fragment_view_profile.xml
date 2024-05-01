@@ -47,7 +47,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:tag="NickName"
-            android:text="Connection in process"
+            android:text=""
             android:textAlignment="center"
             android:textSize="25sp"
             app:layout_constraintBottom_toTopOf="@+id/viewProfileBio"
@@ -64,15 +64,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:autoSizeTextType="uniform"
-            android:text="Connection in processaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-            android:textAlignment="textStart"
+            android:gravity="center"
+            android:text=""
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewProfileViewCard"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.123" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

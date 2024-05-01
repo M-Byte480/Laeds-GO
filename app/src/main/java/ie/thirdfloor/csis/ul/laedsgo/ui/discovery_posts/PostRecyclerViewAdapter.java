@@ -7,6 +7,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.icu.text.SimpleDateFormat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.text.ParseException;
+import java.util.Date;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
@@ -25,7 +32,10 @@ import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -39,9 +49,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private ProfileCollection profileCollection = new ProfileCollection();
 
     private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
+    private HashMap<Integer, String> profilePhotos = new HashMap<>();
+    private HashMap<Integer, String> profileNames = new HashMap<>();
     private static TOLPostCollection postCollection = new TOLPostCollection();
 
     private static CommentConnection commentCollection = new CommentConnection();
+
+
 
     public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
         this.postModels = items;
@@ -71,6 +85,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
     @Override
     public void onBindViewHolder(final MyPostViewHolder holder, int position) {
+
+
+        if(loggedInUser.getValue() == null){
+            // We need to return here because we can't do anything without a logged in user
+            return;
+        }
+
         // Function responsible for assigning values to each
         // view as they are coming onto the screen based on their index
         // IN THE RECYCLE VIEW
@@ -79,24 +100,76 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         DiscoveryPostModel model = postModels.get(position);
 
         // Simple binding
-        holder.tvName.setText(model.getUsername());
         holder.tvLocation.setText(model.getLocation());
         holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
         holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         holder.tvContent.setText(model.getContent());
 
-        String[] dateTime = model.getTime().split(" ");
+        String timestamp = model.getTime();
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.US);
 
-        holder.tvTime.setText(dateTime[0]);
-        holder.tvDate.setText(dateTime[1]);
+        Log.i(TAG, "onBindViewHolder: " + timestamp);
+        try{
+            Date date = inputFormat.parse(timestamp);
+
+            String[] dateTime = outputFormat.format(date).split(" ");
+
+            holder.tvTime.setText(dateTime[0]);
+            holder.tvDate.setText(dateTime[1]);
+
+            Log.i(TAG, "onBindViewHolder: " + dateTime[0] + " " + dateTime[1]);
+        }catch (ParseException e){
+            holder.tvTime.setText("Error");
+            holder.tvDate.setText("Error");
+        }
 
         // Button Setups
+
 
         //Check if user has previously liked the post:
         ArrayList<Integer> likedPosts = ((ProfileDocument) loggedInUser.getValue()).likedPosts;
         ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
 
+        Integer userId = Integer.parseInt(model.getUserId());
+        // Profile Picture
+
+        if(profilePhotos.containsKey(userId)) {
+            byte[] decodedString = Base64.decode(profilePhotos.get(userId), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.profilePicture.setImageBitmap(decodedByte);
+        }else{
+            MutableLiveData<IDocument> pfp = new MutableLiveData<>();
+
+            pfp.observe((AppCompatActivity) context, document -> {
+                ProfileDocument profileDocument = (ProfileDocument) document;
+                byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.profilePicture.setImageBitmap(decodedByte);
+                profilePhotos.put(userId, profileDocument.profilePhoto);
+            });
+
+            profileCollection.getUserById(Integer.parseInt(model.getUserId()), pfp);
+        }
+
+        // Set name
+        if(profileNames.containsKey(userId)) {
+            holder.tvName.setText(profileNames.get(userId));
+        }else{
+            MutableLiveData<IDocument> name = new MutableLiveData<>();
+
+            name.observe((AppCompatActivity) context, document -> {
+                ProfileDocument profileDocument = (ProfileDocument) document;
+                holder.tvName.setText(profileDocument.name);
+                profileNames.put(userId, profileDocument.name);
+            });
+
+            profileCollection.getUserById(Integer.parseInt(model.getUserId()), name);
+        }
+
+
+        // Like Buttons
         if(likedPosts.contains(model.getId())){
             model.setLiked();
         } else if (dislikedPosts.contains(model.getId())) {
@@ -246,8 +319,9 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+                ViewProfileFragment profileFragment = ViewProfileFragment.newInstance(model.getUserId());
 
-                transaction.replace(R.id.discoveryPostsRootFragment, ViewProfileFragment.newInstance());
+                transaction.replace(R.id.discoveryPostsRootFragment, profileFragment);
                 transaction.addToBackStack("viewProfileTransaction");
                 transaction.commit();
 

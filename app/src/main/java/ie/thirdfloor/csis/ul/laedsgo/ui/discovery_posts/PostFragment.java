@@ -19,6 +19,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
@@ -68,7 +69,7 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.USER_ID = profileCollection.getUserId();
+        this.USER_ID = ProfileInfo.getId();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);

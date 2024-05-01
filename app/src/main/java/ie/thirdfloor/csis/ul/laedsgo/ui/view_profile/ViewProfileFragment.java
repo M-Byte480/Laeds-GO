@@ -3,26 +3,48 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.view_profile;
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 
 public class ViewProfileFragment extends Fragment {
+
+    private String userId;
+    private ProfileCollection profileDB = new ProfileCollection();
+    private MutableLiveData<IDocument> profile = new MutableLiveData<>();
+    private ViewProfileViewModel mViewModel;
+
+    private static final String TAG = "ViewProfileFragment:";
 
     public static ViewProfileFragment newInstance() {
         return new ViewProfileFragment();
     }
 
-    private ViewProfileViewModel mViewModel;
-
-    private static final String TAG = "ViewProfileFragment:";
+    public static ViewProfileFragment newInstance(String id) {
+        ViewProfileFragment profileFragment = new ViewProfileFragment();
+        profileFragment.userId = id;
+        return profileFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +63,39 @@ public class ViewProfileFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 
+
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
+
+
+        profile.observe(getViewLifecycleOwner(), new Observer<IDocument>() {
+            @Override
+            public void onChanged(IDocument document) {
+                ProfileDocument profileDocument = (ProfileDocument) document;
+                Log.i(TAG, "onChanged: Profile: " + profile.getValue().toString());
+                ImageView profileImage = getView().findViewById(R.id.viewProfilePhoto);
+                TextView profileName = getView().findViewById(R.id.viewProfileName);
+                TextView profileBio = getView().findViewById(R.id.viewProfileBio);
+
+                byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                profileImage.setImageBitmap(decodedByte);
+                profileName.setText(profileDocument.name);
+                profileBio.setText(profileDocument.bio);
+
+            }
+        });
+
+        Log.i(TAG, "onCreateView: Getting profile with id: " + userId);
+        profileDB.getUserById(Integer.valueOf(userId), profile);
+
+        return view;
+    }
 
     private void removeFragmentFromStack(){
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -51,10 +104,6 @@ public class ViewProfileFragment extends Fragment {
         fragmentTransaction.remove(this).commit();
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_view_profile, container, false);
-    }
+
 
 }

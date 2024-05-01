@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostDocument;
@@ -84,6 +85,8 @@ public class PostEntryFragment extends Fragment {
                     Log.i(LOG, "Publish Btn Clicked");
 
                     TOLPostDocument post = new TOLPostDocument();
+
+                    post.userId = ProfileInfo.getId();
 
                     post.message = textWithoutLeadingSpaces;
 
