@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/laed_deck"
-        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.laedDeck.LaedDeckFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.laedDeck.LaedDeckFragmentV2"
         android:label="Deck"
         tools:layout="@layout/fragment_laed_deck"
         />

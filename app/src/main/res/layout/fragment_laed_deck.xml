@@ -14,13 +14,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/postsRecyclerViewList"
-            android:name="ie.thirdfloor.csis.ul.laedsgo.PostFragment"
+            android:name="ie.thirdfloor.csis.ul.laedsgo.PostFragmentV2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            tools:context=".ui.discovery_posts.PostFragment"
-            tools:listitem="@layout/fragment_laed_deck_list_row"/>
+            tools:context=".ui.discovery_posts.PostFragmentV2"
+            tools:listitem="@layout/fragment_laed_deck_v2_row"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
