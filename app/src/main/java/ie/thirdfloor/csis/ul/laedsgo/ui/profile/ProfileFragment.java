@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -23,6 +24,7 @@ import androidx.navigation.Navigation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentProfileBinding;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
@@ -62,7 +64,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileCollection.get(0, mProfile);
+        if ((ProfileInfo.getId() == 0)) {
+            ProfileInfo.setProfile(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+
+        profileCollection.get(ProfileInfo.getId(), mProfile);
 
         Button buttonLogout;
         buttonLogout =binding.logoutButton;
@@ -84,6 +90,24 @@ public class ProfileFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
+        Button gotoEditProfileBtn = view.findViewById(R.id.EditBtn);
+
+        gotoEditProfileBtn.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Navigation.findNavController(v).navigate(R.id.editProfile);
+            }
+        }));
+
+        if(savedInstanceState != null){
+            Log.i("Bojo", "onViewCreated: savedInstance");
+        }
     }
 
     @Override

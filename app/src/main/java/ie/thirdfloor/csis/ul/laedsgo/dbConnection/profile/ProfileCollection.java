@@ -61,6 +61,40 @@ public class ProfileCollection implements ICollectionConnection {
                 });
     }
 
+    public void push(IDocument item, MutableLiveData<IDocument> mProfile) {
+        dbConnection.db.collection("profile")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Integer docId = Integer.parseInt(document.getId()) + 1;
+                                Map<String, Object> map = convertDocumentToMap((ProfileDocument) item, docId);
+                                dbConnection.db.collection("profile")
+                                        .document(docId.toString())
+                                        .set(map)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    mProfile.setValue((ProfileDocument) item);
+                                                    Log.i("test", "added new doc");
+                                                } else {
+                                                    Log.i("test", "did not add new doc");
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
     @Override
     public void get(int id, MutableLiveData<IDocument> mProfile) {
         dbConnection.db.collection("profile")
@@ -126,6 +160,50 @@ public class ProfileCollection implements ICollectionConnection {
     }
 
 
+    public void getByUID(String uid, MutableLiveData<IDocument> mProfile) {
+        dbConnection.db.collection("profile")
+                .whereEqualTo("UID", uid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().size() != 0) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    ProfileDocument doc = document.toObject(ProfileDocument.class);
+                                    mProfile.setValue(doc);
+                                }
+                            } else {
+                                ProfileDocument newProfile = new ProfileDocument();
+                                newProfile.UID = uid;
+
+                                push(newProfile, mProfile);
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void updateUsername(int id, String username) {
+        dbConnection.db.collection("profile").
+                document("" + id).
+                update("name", username);
+    }
+
+    public void updateBio(int id, String bio) {
+        dbConnection.db.collection("profile").
+                document("" + id).
+                update("bio", bio);
+    }
+
+    public void updateProfilePicture(int id, String profilePhoto) {
+        dbConnection.db.collection("profile").
+                document(Integer.toString(id)).
+                update("profilePhoto", profilePhoto);
+    }
+
     public int getUserId(){
         return 0;
     }
@@ -134,6 +212,7 @@ public class ProfileCollection implements ICollectionConnection {
         Map<String, Object> map = new HashMap<String, Object>();
 
         map.put("id", id);
+        map.put("UID", document.UID);
         map.put("name", document.name);
         map.put("ladsSeen", document.ladsSeen);
         map.put("ladsCaught", document.ladsCaught);

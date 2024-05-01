@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentArBinding;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentLoginBinding;
@@ -98,6 +99,9 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getContext(), "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 //Toast.makeText(this, "Signed in as " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                ProfileInfo.setProfile(currentUser.getUid());
+
                 System.out.println(
                         "Signed in as " + user.getEmail() + "\n" +
                                 "User ID: " + user.getUid() + "\n" +

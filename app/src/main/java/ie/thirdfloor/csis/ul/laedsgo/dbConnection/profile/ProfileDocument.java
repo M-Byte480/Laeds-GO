@@ -9,6 +9,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
 public class ProfileDocument implements IDocument {
     public int id = 0;
+    public String UID = "";
     public String name = "default";
     public int ladsSeen = 0;
     public int ladsCaught = 0;
@@ -22,6 +23,7 @@ public class ProfileDocument implements IDocument {
     public String toString() {
         return "ProfileDocument{" +
                 "id=" + id +
+                ", UID=" + UID + '\'' +
                 ", name='" + name + '\'' +
                 ", ladsSeen=" + ladsSeen +
                 ", ladsCaught=" + ladsCaught +
