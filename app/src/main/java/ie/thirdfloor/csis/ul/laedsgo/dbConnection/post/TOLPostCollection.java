@@ -93,7 +93,6 @@ public class TOLPostCollection implements ICollectionConnection {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 TOLPostDocument doc = document.toObject(TOLPostDocument.class);
                                 arrayList.add(doc);
-                                Log.i(TAG, doc.toString());
                             }
 
                             mTolPostList.setValue(arrayList);

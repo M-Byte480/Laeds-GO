@@ -86,7 +86,6 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         recyclerView = view.findViewById(R.id.postsRecyclerViewList);
         setupPostsModels(view, inflater);
-        Log.i(TAG, "onCreateView: before adapter");
         profileCollection.get(USER_ID, loggedInUser);
         this.adapter = new PostRecyclerViewAdapter(getContext(), postsModels, loggedInUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -120,7 +119,6 @@ public class PostFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
                 ArrayList<DiscoveryPostModel> discoveryPosts = new ArrayList<>();
-                Log.i(TAG, "onChanged: ");
                 for (IDocument iDocument : iDocuments) {
                     TOLPostDocument post = (TOLPostDocument) iDocument;
 

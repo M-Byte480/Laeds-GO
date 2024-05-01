@@ -192,7 +192,6 @@ public class PostEntryFragment extends Fragment {
                 post.location.put("lon", (float) location.getLongitude());
                 post.location.put("lat", (float) location.getLatitude());
 
-                Log.i(TAG, "onLocationChanged: " + location.getLongitude() + " " + location.getLatitude());
 
                 if(published){
                     try {

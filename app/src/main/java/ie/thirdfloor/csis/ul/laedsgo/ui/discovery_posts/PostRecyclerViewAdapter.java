@@ -10,6 +10,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -100,7 +103,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         DiscoveryPostModel model = postModels.get(position);
 
         // Simple binding
-        holder.tvLocation.setText(model.getLocation());
+        holder.tvLocation.setText(getCountryName(context, model.getLocation()));
         holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
         holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         holder.tvContent.setText(model.getContent());
@@ -110,7 +113,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
         SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.US);
 
-        Log.i(TAG, "onBindViewHolder: " + timestamp);
         try{
             Date date = inputFormat.parse(timestamp);
 
@@ -119,7 +121,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             holder.tvTime.setText(dateTime[0]);
             holder.tvDate.setText(dateTime[1]);
 
-            Log.i(TAG, "onBindViewHolder: " + dateTime[0] + " " + dateTime[1]);
         }catch (ParseException e){
             holder.tvTime.setText("Error");
             holder.tvDate.setText("Error");
@@ -199,9 +200,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             public void onClick(View v){
                 ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
 
-                Log.i(TAG, "onClick: " + model.getId());
                 model.setLiked(!model.isLiked());
-                Log.i(TAG, "onClick: " + model.isLiked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setLiked();
@@ -248,9 +247,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             public void onClick(View v){
                 ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
 
-                Log.i(TAG, "onClick: " + model.getId());
                 model.setDisliked(!model.isDisliked());
-                Log.i(TAG, "onClick: " + model.isDisliked());
 
                 if(model.checkIfPostIsLikedAndDisliked()){
                     model.setDisliked();
@@ -299,7 +296,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.ibComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: Comments");
                 int postId = model.getId();
                 MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
                 // commentCollection.getAllCommentsByParentId(postId, comments);
@@ -313,7 +309,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         holder.profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: ProfilePicture");
 
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -327,6 +322,30 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
             }
         });
+    }
+
+    public static String getCountryName(Context context, String location) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+
+        if(location.startsWith("null")){
+            return "";
+        }
+
+        try {
+            String[] locationArray = location.split(", ");
+            Float latitude = Float.parseFloat(locationArray[0]);
+            Float longitude = Float.parseFloat(locationArray[1]);
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses != null && !addresses.isEmpty()) {
+                Address bestMatch = addresses.get(0);
+                return bestMatch.getFeatureName() + ", " + bestMatch.getLocality() + ", "  + bestMatch.getCountryName();
+            }
+            return "";
+        } catch (IOException ignored) {
+            return "";
+        }
     }
 
 

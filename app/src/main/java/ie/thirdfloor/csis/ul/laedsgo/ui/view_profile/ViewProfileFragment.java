@@ -55,8 +55,6 @@ public class ViewProfileFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 // Handle the back button event
-                Log.i(TAG, "handleOnBackPressed: BACK PRESS");
-
                 // We remove the transaction
                 removeFragmentFromStack();
             }
@@ -76,7 +74,6 @@ public class ViewProfileFragment extends Fragment {
             @Override
             public void onChanged(IDocument document) {
                 ProfileDocument profileDocument = (ProfileDocument) document;
-                Log.i(TAG, "onChanged: Profile: " + profile.getValue().toString());
                 ImageView profileImage = getView().findViewById(R.id.viewProfilePhoto);
                 TextView profileName = getView().findViewById(R.id.viewProfileName);
                 TextView profileBio = getView().findViewById(R.id.viewProfileBio);
@@ -91,7 +88,6 @@ public class ViewProfileFragment extends Fragment {
             }
         });
 
-        Log.i(TAG, "onCreateView: Getting profile with id: " + userId);
         profileDB.getUserById(Integer.valueOf(userId), profile);
 
         return view;
