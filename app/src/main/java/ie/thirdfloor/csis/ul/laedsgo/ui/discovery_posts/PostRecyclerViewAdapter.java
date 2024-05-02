@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -56,7 +60,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     private static TOLPostCollection postCollection = new TOLPostCollection();
 
     private static CommentConnection commentCollection = new CommentConnection();
-
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
     public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
@@ -102,7 +106,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         DiscoveryPostModel model = postModels.get(position);
 
         // Simple binding
-        holder.tvLocation.setText(getCountryName(context, model.getLocation()));
+        loadLocation(holder, model.getLocation());
+
         holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
         holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         holder.tvContent.setText(model.getContent());
@@ -327,10 +332,6 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> addresses = null;
 
-        if(location.startsWith("null")){
-            return "";
-        }
-
         try {
             String[] locationArray = location.split(", ");
             Float latitude = Float.parseFloat(locationArray[0]);
@@ -345,6 +346,26 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         } catch (IOException ignored) {
             return "";
         }
+    }
+
+    private void loadLocation(MyPostViewHolder holder, String location){
+        if (location.startsWith("null")) {
+            holder.tvLocation.setText("");
+            return;
+        }
+
+        holder.tvLocation.setText("Loading...");
+
+        Future<String> locationFromCoords = executor.submit(() -> getCountryName(context, location));
+
+        executor.execute( () -> {
+            try{
+                String countryName = locationFromCoords.get();
+                holder.tvLocation.setText(countryName);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        });
     }
 
 
@@ -391,4 +412,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             return super.toString() + " '" + "mContentView.getText()" + "'";
         }
     }
+
+
+
+
 }
