@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -356,16 +357,15 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
         holder.tvLocation.setText("Loading...");
 
-        Future<String> locationFromCoords = executor.submit(() -> getCountryName(context, location));
-
-        executor.execute( () -> {
-            try{
-                String countryName = locationFromCoords.get();
-                holder.tvLocation.setText(countryName);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        });
+        // Set off asynchronous task in the background
+        CompletableFuture.supplyAsync(() -> getCountryName(context, location), executor)
+                // Once the task is done, update the UI
+                .thenAcceptAsync(countryName -> {
+                    holder.itemView.post(() -> {
+                        // Update UI on the main thread
+                        holder.tvLocation.setText(countryName);
+                    });
+                }, Runnable::run);
     }
 
 
