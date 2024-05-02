@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -111,7 +110,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         String timestamp = model.getTime();
 
         SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MMM/yyyy", Locale.US);
 
         try{
             Date date = inputFormat.parse(timestamp);
@@ -119,7 +118,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             String[] dateTime = outputFormat.format(date).split(" ");
 
             holder.tvTime.setText(dateTime[0]);
-            holder.tvDate.setText(dateTime[1]);
+            holder.tvDate.setText(dateTime[1].replace("/", " "));
 
         }catch (ParseException e){
             holder.tvTime.setText("Error");

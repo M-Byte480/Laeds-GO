@@ -27,6 +27,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:cardCornerRadius="64dp"
+            android:layout_marginStart="8dp"
             android:layout_gravity="center_vertical"
             >
 
@@ -136,29 +137,29 @@
 
 
         <LinearLayout
-            android:layout_width="180dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_row="1"
             android:layout_column="0"
             android:layout_columnSpan="2"
             android:layout_columnWeight="2"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_marginStart="6dp"
             android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="12dp"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="#0F9D58">
 
             <TextView
                 android:id="@+id/username"
-                android:layout_width="match_parent"
+                android:layout_width="85dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:autoSizeTextType="uniform"
                 android:text="name"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="#0F9D58"
                 android:textSize="16sp"
+                android:layout_marginBottom="32dp"
+                android:layout_marginStart="8dp"
                 />
 
             <TextView
@@ -166,6 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textFontWeight="700"
                 android:text="time"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="#0F9D58" />
@@ -212,20 +214,21 @@
 
         <TextView
             android:id="@+id/location"
-            android:layout_width="166dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_row="1"
             android:layout_column="2"
             android:layout_columnSpan="2"
             android:layout_columnWeight="2"
-            android:layout_gravity="center|end"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="18dp"
             android:text="location"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="#0F9D58" />
+            android:textColor="#0F9D58"
+            android:textSize="14sp" />
 
     </GridLayout>
 </androidx.cardview.widget.CardView>
