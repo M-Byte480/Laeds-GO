@@ -100,11 +100,23 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         binding = FragmentMapsBinding.inflate(inflater, container, false);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-        requestLocationPermission();
+
+        if (EasyPermissions.hasPermissions(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            initializeMap();
+        } else {
+            requestLocationPermission();
+        }
 
         leadDeck = ((MainActivity) requireActivity()).getLeadsDeck();
 
         return binding.getRoot();
+    }
+
+    private void initializeMap() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this::onMapReady);
+        }
     }
 
     @Override
