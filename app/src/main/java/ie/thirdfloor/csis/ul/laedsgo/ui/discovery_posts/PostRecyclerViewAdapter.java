@@ -182,14 +182,14 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         }
 
         if(model.isLiked()){
-            holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+            holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
         }else{
             holder.ibLike.setBackgroundResource(R.drawable.like);
         }
 
 
         if(model.isDisliked()){
-            holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+            holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
         }else{
             holder.ibDislike.setBackgroundResource(R.drawable.dislike);
         }
@@ -215,7 +215,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 }
 
                 if(model.isLiked()){
-                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+                    holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
                     postCollection.incrementLike(model.getId(), 1);
                     model.incrementLikes();
                 }else{
@@ -224,7 +224,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                     model.decrementLikes();
                 }
                 if(model.isDisliked()){
-                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+                    holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
                 }else{
                     holder.ibDislike.setBackgroundResource(R.drawable.dislike);
                 }
@@ -263,7 +263,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 }
 
                 if(model.isDisliked()){
-                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+                    holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
                     postCollection.incrementDislike(model.getId(), 1);
                     model.incremenetDislikes();
 
@@ -275,7 +275,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
 
                 }
                 if(model.isLiked()){
-                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+                    holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
                 }else{
                     holder.ibLike.setBackgroundResource(R.drawable.like);
                 }
