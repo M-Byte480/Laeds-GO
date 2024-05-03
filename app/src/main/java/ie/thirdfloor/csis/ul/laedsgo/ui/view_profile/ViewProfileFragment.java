@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.util.HashMap;
+
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
@@ -30,11 +32,12 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 public class ViewProfileFragment extends Fragment {
 
     private String userId;
-    private ProfileCollection profileDB = new ProfileCollection();
-    private MutableLiveData<IDocument> profile = new MutableLiveData<>();
+    private final ProfileCollection profileDB = new ProfileCollection();
+    private final MutableLiveData<IDocument> profile = new MutableLiveData<>();
     private ViewProfileViewModel mViewModel;
 
     private static final String TAG = "ViewProfileFragment:";
+    private static final HashMap<String, IDocument> cache = new HashMap<>();
 
     public static ViewProfileFragment newInstance() {
         return new ViewProfileFragment();
@@ -85,10 +88,26 @@ public class ViewProfileFragment extends Fragment {
                 profileName.setText(profileDocument.name);
                 profileBio.setText(profileDocument.bio);
 
+                cache.put(userId, document);
             }
         });
 
-        profileDB.getUserById(Integer.valueOf(userId), profile);
+        if(cache.get(userId) != null){
+            ProfileDocument profileDocument = (ProfileDocument) cache.get(userId);
+            ImageView profileImage = view.findViewById(R.id.viewProfilePhoto);
+            TextView profileName = view.findViewById(R.id.viewProfileName);
+            TextView profileBio = view.findViewById(R.id.viewProfileBio);
+
+            byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+            profileImage.setImageBitmap(decodedByte);
+            profileName.setText(profileDocument.name);
+            profileBio.setText(profileDocument.bio);
+        }else{
+            profileDB.getUserById(Integer.valueOf(userId), profile);
+        }
+
 
         return view;
     }

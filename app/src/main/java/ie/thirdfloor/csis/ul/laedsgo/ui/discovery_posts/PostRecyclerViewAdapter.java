@@ -12,9 +12,7 @@ import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +40,6 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -53,12 +50,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     Context context;
     private List<DiscoveryPostModel> postModels;
 
-    private ProfileCollection profileCollection = new ProfileCollection();
+    private final ProfileCollection profileCollection = new ProfileCollection();
 
     private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
-    private HashMap<Integer, String> profilePhotos = new HashMap<>();
-    private HashMap<Integer, String> profileNames = new HashMap<>();
-    private static TOLPostCollection postCollection = new TOLPostCollection();
+    private static final HashMap<Integer, String> profilePhotosCache = new HashMap<>();
+    private static final HashMap<Integer, String> profileNamesCache = new HashMap<>();
+    private static final TOLPostCollection postCollection = new TOLPostCollection();
 
     private static CommentConnection commentCollection = new CommentConnection();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -141,8 +138,8 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         Integer userId = Integer.parseInt(model.getUserId());
         // Profile Picture
 
-        if(profilePhotos.containsKey(userId)) {
-            byte[] decodedString = Base64.decode(profilePhotos.get(userId), Base64.DEFAULT);
+        if(profilePhotosCache.containsKey(userId)) {
+            byte[] decodedString = Base64.decode(profilePhotosCache.get(userId), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.profilePicture.setImageBitmap(decodedByte);
         }else{
@@ -153,22 +150,22 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                 byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 holder.profilePicture.setImageBitmap(decodedByte);
-                profilePhotos.put(userId, profileDocument.profilePhoto);
+                profilePhotosCache.put(userId, profileDocument.profilePhoto);
             });
 
             profileCollection.getUserById(Integer.parseInt(model.getUserId()), pfp);
         }
 
         // Set name
-        if(profileNames.containsKey(userId)) {
-            holder.tvName.setText(profileNames.get(userId));
+        if(profileNamesCache.containsKey(userId)) {
+            holder.tvName.setText(profileNamesCache.get(userId));
         }else{
             MutableLiveData<IDocument> name = new MutableLiveData<>();
 
             name.observe((AppCompatActivity) context, document -> {
                 ProfileDocument profileDocument = (ProfileDocument) document;
                 holder.tvName.setText(profileDocument.name);
-                profileNames.put(userId, profileDocument.name);
+                profileNamesCache.put(userId, profileDocument.name);
             });
 
             profileCollection.getUserById(Integer.parseInt(model.getUserId()), name);
