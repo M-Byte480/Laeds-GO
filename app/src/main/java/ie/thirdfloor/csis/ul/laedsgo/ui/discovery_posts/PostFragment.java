@@ -19,6 +19,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
@@ -68,7 +69,7 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.USER_ID = profileCollection.getUserId();
+        this.USER_ID = ProfileInfo.getId();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -85,7 +86,6 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         recyclerView = view.findViewById(R.id.postsRecyclerViewList);
         setupPostsModels(view, inflater);
-        Log.i(TAG, "onCreateView: before adapter");
         profileCollection.get(USER_ID, loggedInUser);
         this.adapter = new PostRecyclerViewAdapter(getContext(), postsModels, loggedInUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -119,7 +119,6 @@ public class PostFragment extends Fragment {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
                 ArrayList<DiscoveryPostModel> discoveryPosts = new ArrayList<>();
-                Log.i(TAG, "onChanged: ");
                 for (IDocument iDocument : iDocuments) {
                     TOLPostDocument post = (TOLPostDocument) iDocument;
 
@@ -155,7 +154,7 @@ public class PostFragment extends Fragment {
                 p.dislikes,
                 false, false,
                 p.message,
-                p.location.get("lan") + ", " + p.location.get("lon"),
+                p.location.get("lat") + ", " + p.location.get("lon"),
                 p.timestamp.toString());
     }
 }
