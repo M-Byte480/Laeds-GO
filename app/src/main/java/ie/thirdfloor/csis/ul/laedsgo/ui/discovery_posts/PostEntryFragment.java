@@ -5,8 +5,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationRequest;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -28,8 +26,6 @@ import android.Manifest;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
@@ -43,12 +39,10 @@ public class PostEntryFragment extends Fragment {
     private TextView characterCountLeftView;
     private final int maxCharacterCount = 272;
     private FusedLocationProviderClient fusedLocationProvider;
-    private GoogleMap myMap;
     private static Location currentLocation;
-    private TOLPostDocument post = new TOLPostDocument();
-    private TOLPostCollection dbConnection = new TOLPostCollection();
+    private final TOLPostDocument post = new TOLPostDocument();
+    private final TOLPostCollection dbConnection = new TOLPostCollection();
     private static final String TAG = "PostEntryFragment";
-    private static LocationListener locationListener;
     private boolean published = false;
 
 
@@ -58,9 +52,8 @@ public class PostEntryFragment extends Fragment {
 
 
     public static PostEntryFragment newInstance() {
-        PostEntryFragment fragment = new PostEntryFragment();
 
-        return fragment;
+        return new PostEntryFragment();
     }
 
     @Override
@@ -81,16 +74,13 @@ public class PostEntryFragment extends Fragment {
         }
 
         Task<Location> task = fusedLocationProvider.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocation = location;
-                    setPostLongitudeAndLatitude(post);
-                    Log.i(TAG, "onSuccess: Location Grabbed");
-                }else{
-                    Log.i(TAG, "onSuccess: Location is null");
-                }
+        task.addOnSuccessListener(location -> {
+            if (location != null) {
+                currentLocation = location;
+                setPostLongitudeAndLatitude(post);
+                Log.i(TAG, "onSuccess: Location Grabbed");
+            }else{
+                Log.i(TAG, "onSuccess: Location is null");
             }
         });
     }
@@ -124,48 +114,41 @@ public class PostEntryFragment extends Fragment {
 
         Button publishBtn = view.findViewById(R.id.publishBtn);
 
-        publishBtn.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String textWithoutLeadingSpaces = multilineTextEdit.getText().toString().trim();
-                int textLength = textWithoutLeadingSpaces.length();
-                if (textLength > 0) {
-                    Log.i(LOG, "Publish Btn Clicked");
+        publishBtn.setOnClickListener((v -> {
+            String textWithoutLeadingSpaces = multilineTextEdit.getText().toString().trim();
+            int textLength = textWithoutLeadingSpaces.length();
+            if (textLength > 0) {
+                Log.i(LOG, "Publish Btn Clicked");
 
-                    post.userId = ProfileInfo.getId();
+                post.userId = ProfileInfo.getId();
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                        } else {
-
-                        }
-                    }
-
-                    post.message = textWithoutLeadingSpaces;
-
-                    if(currentLocation != null){
-                        Log.i(TAG, "onClick: " + currentLocation.getLongitude() + " " + currentLocation.getLatitude());
-
-                        post.location.put("lon", (float) currentLocation.getLongitude());
-                        post.location.put("lat", (float) currentLocation.getLatitude());
-
-                        try {
-                            dbConnection.push(post);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }else{
-                        published = true;
-                    }
-
-
-                    Toast.makeText(getContext(), "Successfully Published", Toast.LENGTH_LONG).show();
-
-                    requireActivity().getSupportFragmentManager().popBackStack();
-                } else {
-                    Toast.makeText(getContext(), "There is not enough content to post", Toast.LENGTH_LONG).show();
+                if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
+
+                post.message = textWithoutLeadingSpaces;
+
+                if(currentLocation != null){
+                    Log.i(TAG, "onClick: " + currentLocation.getLongitude() + " " + currentLocation.getLatitude());
+
+                    post.location.put("lon", (float) currentLocation.getLongitude());
+                    post.location.put("lat", (float) currentLocation.getLatitude());
+
+                    try {
+                        dbConnection.push(post);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    published = true;
+                }
+
+
+                Toast.makeText(getContext(), "Successfully Published", Toast.LENGTH_LONG).show();
+
+                requireActivity().getSupportFragmentManager().popBackStack();
+            } else {
+                Toast.makeText(getContext(), "There is not enough content to post", Toast.LENGTH_LONG).show();
             }
         }));
         return view;
@@ -174,33 +157,30 @@ public class PostEntryFragment extends Fragment {
     private void setPostLongitudeAndLatitude(TOLPostDocument post) {
 
         // Check for location permission
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Request permission if not granted
-            ActivityCompat.requestPermissions(getActivity(),
+            ActivityCompat.requestPermissions(requireActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
             return;
         }
 
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
 
-        locationListener = new LocationListener() {
-            public void onLocationChanged(android.location.Location location) {
-                post.location.put("lon", (float) location.getLongitude());
-                post.location.put("lat", (float) location.getLatitude());
+        LocationListener locationListener = location -> {
+            post.location.put("lon", (float) location.getLongitude());
+            post.location.put("lat", (float) location.getLatitude());
 
-
-                if(published){
-                    try {
-                        dbConnection.push(post);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    published = false;
+            if (published) {
+                try {
+                    dbConnection.push(post);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+                published = false;
             }
         };
 

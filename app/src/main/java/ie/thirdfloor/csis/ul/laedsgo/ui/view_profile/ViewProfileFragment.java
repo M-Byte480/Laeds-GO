@@ -11,10 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +32,6 @@ public class ViewProfileFragment extends Fragment {
     private String userId;
     private final ProfileCollection profileDB = new ProfileCollection();
     private final MutableLiveData<IDocument> profile = new MutableLiveData<>();
-    private ViewProfileViewModel mViewModel;
-
     private static final String TAG = "ViewProfileFragment:";
     private static final HashMap<String, IDocument> cache = new HashMap<>();
 
@@ -73,23 +69,20 @@ public class ViewProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_view_profile, container, false);
 
 
-        profile.observe(getViewLifecycleOwner(), new Observer<IDocument>() {
-            @Override
-            public void onChanged(IDocument document) {
-                ProfileDocument profileDocument = (ProfileDocument) document;
-                ImageView profileImage = getView().findViewById(R.id.viewProfilePhoto);
-                TextView profileName = getView().findViewById(R.id.viewProfileName);
-                TextView profileBio = getView().findViewById(R.id.viewProfileBio);
+        profile.observe(getViewLifecycleOwner(), document -> {
+            ProfileDocument profileDocument = (ProfileDocument) document;
+            ImageView profileImage = requireView().findViewById(R.id.viewProfilePhoto);
+            TextView profileName = requireView().findViewById(R.id.viewProfileName);
+            TextView profileBio = requireView().findViewById(R.id.viewProfileBio);
 
-                byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                profileImage.setImageBitmap(decodedByte);
-                profileName.setText(profileDocument.name);
-                profileBio.setText(profileDocument.bio);
+            profileImage.setImageBitmap(decodedByte);
+            profileName.setText(profileDocument.name);
+            profileBio.setText(profileDocument.bio);
 
-                cache.put(userId, document);
-            }
+            cache.put(userId, document);
         });
 
         if(cache.get(userId) != null){
