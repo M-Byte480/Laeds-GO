@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="userPFP"
                 android:scaleType="centerCrop"
-                android:src="@drawable/cat" />
+                />
         </androidx.cardview.widget.CardView>
 
 

@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     app:layout_constraintHorizontal_chainStyle="packed"
-                    tools:src="@drawable/cat" />
+                     />
 
             </androidx.cardview.widget.CardView>
 
