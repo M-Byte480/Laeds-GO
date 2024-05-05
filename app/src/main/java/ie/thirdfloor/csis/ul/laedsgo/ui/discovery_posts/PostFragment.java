@@ -124,7 +124,6 @@ public class PostFragment extends Fragment {
             int diff = adapter.itemCount - oldItems;
 
             Objects.requireNonNull(recyclerView.getAdapter()).notifyItemRangeInserted(0, diff);
-//                recyclerView.getAdapter().notifyDataSetChanged();
         });
 
         dbConnection.getAll(elements);
