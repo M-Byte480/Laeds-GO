@@ -189,7 +189,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             holder.ibDislike.setBackgroundResource(R.drawable.dislike);
         }
 
-        holder.ibComment.setBackgroundResource(R.drawable.chat);
+        holder.ibComment.setBackgroundResource(R.drawable.comment);
 
         // button actions setup
 
