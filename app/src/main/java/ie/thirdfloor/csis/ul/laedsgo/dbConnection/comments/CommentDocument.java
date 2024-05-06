@@ -4,12 +4,12 @@ import java.util.Date;
 
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
-public class CommentDocument implements IDocument {
+public class CommentDocument implements IDocument, Comparable<CommentDocument> {
     public Integer id = 0;
     public Integer userId = 0;
     public String message = "";
     public Integer parentId = -1;
-    public Integer type = 0;
+    public Integer postId = 0;
     public Date timestamp;
 
     @Override
@@ -19,8 +19,12 @@ public class CommentDocument implements IDocument {
                 ", userId=" + userId +
                 ", message='" + message + '\'' +
                 ", parentId=" + parentId +
-                ", type=" + type +
+                ", type=" + postId +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public int compareTo(CommentDocument comment) {
+        return this.timestamp.compareTo(comment.timestamp);
     }
 }
