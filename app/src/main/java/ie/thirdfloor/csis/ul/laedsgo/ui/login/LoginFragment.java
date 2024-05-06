@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -36,8 +37,7 @@ public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
 
-    private Button buttonLogIn;
-    private Button buttonLogout;
+    private ImageButton buttonLogIn;
     private FirebaseUser currentUser;
     private static final String TAG = "LoginFragment";
 
@@ -61,7 +61,7 @@ public class LoginFragment extends Fragment {
 
         //Grabbing button ids
         //Logout button in fragment_profile.xml
-        buttonLogIn = (Button) root.findViewById(R.id.signInButton);
+        buttonLogIn = (ImageButton) root.findViewById(R.id.signInButton);
 
         //Login eventListener
         buttonLogIn.setOnClickListener(v -> {

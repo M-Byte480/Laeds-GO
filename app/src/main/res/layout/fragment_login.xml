@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.login.LoginFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context=".ui.login.LoginFragment"
+    android:background="@drawable/login">
 
     <TextView
         android:id="@+id/text_login"
@@ -22,20 +21,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <ImageButton
         android:id="@+id/signInButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="254dp"
+        android:layout_height="56dp"
         android:layout_marginStart="158dp"
         android:layout_marginEnd="158dp"
         android:layout_marginBottom="60dp"
         android:onClick="onClick"
-        android:text="Sign in"
+        android:background="@drawable/loginbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_login"
-        app:layout_constraintVertical_bias="0.183" />
+        app:layout_constraintVertical_bias="0.581"
+        android:contentDescription="" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
