@@ -59,4 +59,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.login.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_view_profile" />
+
+    <fragment
+        android:id="@+id/editProfile"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.profile.edit.ProfileEditFragment"
+        android:label="EditProfile"
+        tools:layout="@layout/fragment_profile_edit" />
 </navigation>

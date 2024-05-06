@@ -22,8 +22,8 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 public class DiscoveryPostsRoot extends Fragment {
     private static final String TAG = "DiscoveryPostsRoot";
     private FragmentDiscoveryPostsRootBinding binding;
-    private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
-    private ProfileCollection profileCollection = new ProfileCollection();
+    private final MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
+    private final ProfileCollection profileCollection = new ProfileCollection();
     public DiscoveryPostsRoot() {
         // Required empty public constructor
     }
@@ -63,12 +63,7 @@ public class DiscoveryPostsRoot extends Fragment {
 
         Button goToPostsButton = view.findViewById(R.id.makePostBtn);
 
-        goToPostsButton.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Navigation.findNavController(v).navigate(R.id.make_post);
-            }
-        }));
+        goToPostsButton.setOnClickListener((v -> Navigation.findNavController(v).navigate(R.id.make_post)));
 
         if(savedInstanceState != null){
             Log.i(TAG, "onViewCreated: savedInstance");

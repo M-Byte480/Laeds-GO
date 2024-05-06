@@ -1,6 +1,5 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.profile;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 

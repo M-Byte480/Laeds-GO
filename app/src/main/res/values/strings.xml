@@ -26,4 +26,6 @@
     <string name="title_activity_comment">CommentActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="error">Error</string>
+    <string name="loading">Loading…</string>
 </resources>
