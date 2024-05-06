@@ -1,6 +1,10 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.commentSection;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 
 public class CommentReyclerViewAdapter extends RecyclerView.Adapter<CommentReyclerViewAdapter.MyViewHolder> {
     Context context;
-    ArrayList<CommentModel> commentModels;
+    ArrayList<CommentModel> commentModels = new ArrayList<>();
     public CommentReyclerViewAdapter(Context context , ArrayList<CommentModel> commentModels) {
         this.context = context;
         this.commentModels = commentModels;
     }
 
+    public void setArray(ArrayList<CommentModel> array){
+        this.commentModels = array;
+    }
+
+    public void addToArray(CommentModel array){
+        this.commentModels.add(array);
+    }
 
 
     @NonNull
@@ -38,13 +50,20 @@ public class CommentReyclerViewAdapter extends RecyclerView.Adapter<CommentReycl
 
         holder.userName.setText(commentModels.get(position).getUserName());
         holder.commentTxt.setText(commentModels.get(position).getComment_user_text());
-        holder.imageView.setImageResource(commentModels.get(position).getImage());
+
+        byte[] decodedString = Base64.decode(commentModels.get(position).image, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+        holder.imageView.setImageBitmap(decodedByte);
+//        holder.imageView.setImageResource(commentModels.get(position).getImage());
     }
 
     @Override
     public int getItemCount() {
         return commentModels.size();
     }
+
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 

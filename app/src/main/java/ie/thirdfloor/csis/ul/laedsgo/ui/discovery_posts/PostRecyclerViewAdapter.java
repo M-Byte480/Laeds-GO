@@ -4,9 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +21,20 @@ import android.widget.TextView;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CommentFragment;
+import ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CommentModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CommentReyclerViewAdapter;
 import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -232,7 +242,46 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
                  commentCollection.getAllCommentsForPost(comments, postId);
 
                 // todo: Inject the info into the comments fragment
-//                CommentActivity commentsFragment = CommentActivity.newInstance(comments, v);
+
+
+//                comments.observe(getViewLifecycleOwner(), new Observer<ArrayList<IDocument>>() {
+//                    @Override
+//                    public void onChanged(ArrayList<IDocument> iDocuments) {
+//                        ArrayList<CommentModel> commentModels = new ArrayList<>();
+//                        Log.i(TAG, "onChanged: ");
+//                        for (IDocument iDocument : iDocuments) {
+//                            CommentDocument comment = (CommentDocument) iDocument;
+//
+//                            commentModels.add(
+//                                    createComment(comment)
+//                            );
+//                        }
+//
+//                        commentModels.sort(Collections.reverseOrder());
+//
+//                        RecyclerView recyclerView = v.findViewById(R.id.commentRecycleView);
+//                        CommentReyclerViewAdapter adapter = new CommentReyclerViewAdapter(context, commentModels);
+//
+//                        recyclerView.setAdapter(adapter);
+////                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//
+//                        recyclerView.getAdapter().notifyDataSetChanged();
+//
+//                        Navigation.findNavController(v).navigate(R.id.commentFragment);
+//                    }
+//                });
+
+//                Bundle args = new Bundle();
+//                args.putParcelableArrayList("comments", comments);
+////                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+////                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+////                FragmentTransaction transaction = fragmentManager.beginTransaction();
+////
+////
+////                transaction.replace(R.id.discoveryPostsRootFragment, commentsFragment);
+////                transaction.addToBackStack("viewCommentsForPost");
+////                transaction.commit();
+//                Navigation.findNavController(v).navigate(R.id.commentFragment);
             }
         });
 
@@ -254,6 +303,18 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             }
         });
     }
+
+//    private CommentModel createComment(CommentDocument comment) {
+//        CommentModel model = new CommentModel();
+//
+//        String comment_user_text = "";
+//
+//        model.setId(comment.id);
+//        model.setUserId(comment.userId);
+//        model.setComment_user_text(comment.message);
+//
+//
+//    }
 
 
     @Override
