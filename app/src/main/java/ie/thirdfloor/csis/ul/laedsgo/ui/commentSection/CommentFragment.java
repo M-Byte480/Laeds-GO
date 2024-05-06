@@ -70,6 +70,8 @@ public class CommentFragment extends Fragment {
         MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
         ProfileCollection profileConnection = new ProfileCollection();
         Button postComment = view.findViewById(R.id.commentsButton);
+        SwipeRefreshLayout postFragmentSwipeRefreshLayout = view.findViewById(R.id.swiperefreshComments);
+
         postComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,11 +118,13 @@ public class CommentFragment extends Fragment {
 
                 }
 
+                RecyclerView recyclerView = view.findViewById(R.id.commentList);
 
                 commentModels.sort(Collections.reverseOrder());
-//                adapter.reverseArray();
 
-                RecyclerView recyclerView = view.findViewById(R.id.commentList);
+                adapter.sortArray();
+
+                adapter.notifyDataSetChanged();
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(adapter);
                 recyclerView.getAdapter().notifyDataSetChanged();
@@ -129,7 +133,6 @@ public class CommentFragment extends Fragment {
 
         commentConnection.getAllCommentsForPost(comments, postId);
 
-        SwipeRefreshLayout postFragmentSwipeRefreshLayout = view.findViewById(R.id.swiperefreshComments);
 
         postFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
             final Handler handler = new Handler();

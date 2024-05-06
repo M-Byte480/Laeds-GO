@@ -33,7 +33,11 @@ public class CommentReyclerViewAdapter extends RecyclerView.Adapter<CommentReycl
     }
 
     public void addToArray(CommentModel array){
-        this.commentModels.add(0, array);
+        this.commentModels.add(array);
+    }
+
+    public void sortArray(){
+        Collections.sort(this.commentModels);
     }
 
     public void clearArray(){

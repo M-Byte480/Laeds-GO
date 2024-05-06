@@ -94,7 +94,7 @@ public class CommentModel implements Comparable<CommentModel> {
 
     @Override
     public int compareTo(CommentModel that) {
-        return Integer.compare(
+        return -1*Integer.compare(
                 this.id,
                 that.id
         );
