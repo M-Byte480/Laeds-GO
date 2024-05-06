@@ -13,4 +13,9 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="FirebaseUI.AuthMethodPicker" parent="FirebaseUI">
+        <!-- Set the background color -->
+        <item name="android:windowBackground">@drawable/defaultpage</item>
+        <!-- Other customization options -->
+    </style>
 </resources>
