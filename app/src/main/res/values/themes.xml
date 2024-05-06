@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name="android:windowBackground">@drawable/login</item>
+
         <!-- Customize your theme here. -->
     </style>
     <style name="FirebaseUI.AuthMethodPicker" parent="FirebaseUI">

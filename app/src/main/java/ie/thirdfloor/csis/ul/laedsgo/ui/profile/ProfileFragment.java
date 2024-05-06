@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +71,8 @@ public class ProfileFragment extends Fragment {
 
         profileCollection.get(ProfileInfo.getId(), mProfile);
 
-        Button buttonLogout;
-        buttonLogout =binding.logoutButton;
+        ImageButton buttonLogout;
+        buttonLogout = binding.logoutButton;
 
         //Logout eventListener
         buttonLogout.setOnClickListener(V -> {
