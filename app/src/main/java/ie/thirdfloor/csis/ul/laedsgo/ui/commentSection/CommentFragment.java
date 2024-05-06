@@ -1,19 +1,22 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.commentSection;
 
-import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.provider.ContactsContract;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,11 +69,23 @@ public class CommentFragment extends Fragment {
         CommentConnection commentConnection = new CommentConnection();
         MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
         ProfileCollection profileConnection = new ProfileCollection();
+        Button postComment = view.findViewById(R.id.commentsButton);
+        postComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateCommentFragment.postId = postId;
+                NavHostFragment navHostFragment = (NavHostFragment) ((AppCompatActivity) getContext()).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+                navHostFragment.getNavController().navigate(R.id.createComment);
+            }
+
+
+        });
         comments.observe(getViewLifecycleOwner(), new Observer<ArrayList<IDocument>>() {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
                 ArrayList<CommentModel> commentModels = new ArrayList<>();
                 CommentReyclerViewAdapter adapter = new CommentReyclerViewAdapter(getContext(), commentModels);
+                adapter.clearArray();
 
                 for (IDocument iDocument : iDocuments) {
                     CommentDocument commentDocument = (CommentDocument) iDocument;
@@ -103,6 +118,7 @@ public class CommentFragment extends Fragment {
 
 
                 commentModels.sort(Collections.reverseOrder());
+//                adapter.reverseArray();
 
                 RecyclerView recyclerView = view.findViewById(R.id.commentList);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -112,6 +128,20 @@ public class CommentFragment extends Fragment {
         });
 
         commentConnection.getAllCommentsForPost(comments, postId);
+
+        SwipeRefreshLayout postFragmentSwipeRefreshLayout = view.findViewById(R.id.swiperefreshComments);
+
+        postFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
+            final Handler handler = new Handler();
+
+            commentConnection.getAllCommentsForPost(comments, postId);
+
+            handler.postDelayed(() -> {
+                if(postFragmentSwipeRefreshLayout.isRefreshing()) {
+                    postFragmentSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 1000);
+        });
 
         return view;
     }
@@ -123,7 +153,7 @@ public class CommentFragment extends Fragment {
                 commentDocument.userId,
                 commentDocument.message,
                 commentDocument.postId,
-        0,
+                0,
                 commentDocument.timestamp,
                 userPhoto,
                 username);

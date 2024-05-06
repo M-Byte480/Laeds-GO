@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
@@ -32,7 +33,15 @@ public class CommentReyclerViewAdapter extends RecyclerView.Adapter<CommentReycl
     }
 
     public void addToArray(CommentModel array){
-        this.commentModels.add(array);
+        this.commentModels.add(0, array);
+    }
+
+    public void clearArray(){
+        this.commentModels.clear();
+    }
+
+    public void reverseArray(){
+        Collections.reverse(this.commentModels);
     }
 
 
