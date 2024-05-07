@@ -63,7 +63,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private boolean markersSet = false;
 
     private ArFragment arFragment;
-    private ModelRenderable modelRenderable;
 
     @SuppressLint("MissingPermission")
     private void onMapReady(GoogleMap googleMap) {
