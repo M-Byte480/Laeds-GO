@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.maps;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,8 +28,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.ar.core.Anchor;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.Renderable;
+import com.google.ar.sceneform.ux.TransformableNode;
+import com.google.ar.sceneform.ux.ArFragment;
 
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -46,6 +55,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private final int REQUEST_LOCATION_PERMISSION = 1;
     private ArrayList<LeadsDeckDocument> leadDeck;
     private boolean markersSet = false;
+
+    private ArFragment arFragment;
+    private ModelRenderable modelRenderable;
 
     @SuppressLint("MissingPermission")
     private void onMapReady(GoogleMap googleMap) {
@@ -94,6 +106,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                     }
                 });
     }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -108,6 +121,17 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         }
 
         leadDeck = ((MainActivity) requireActivity()).getLeadsDeck();
+
+        arFragment = new ArFragment();
+        arFragment.setOnTapArPlaneListener(
+                (HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
+                    if (plane.getType() != Plane.Type.HORIZONTAL_UPWARD_FACING)
+                        return;
+
+                    Anchor anchor = hitresult.createAnchor();
+                    placeObject(arFragment, anchor, R.raw.model);
+                }
+        );
 
         return binding.getRoot();
     }
@@ -137,7 +161,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
-    public void     requestLocationPermission() {
+    public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if(EasyPermissions.hasPermissions(requireContext(), perms)) {
             Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT).show();
@@ -150,5 +174,32 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
         Log.d("Maps Fragment", "Opening AR fragment");
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(((ViewGroup)getView().getParent()).getId(), arFragment, "ar")
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .commit();
+    }
+    private void placeObject(ArFragment arFragment, Anchor anchor, int uri) {
+        ModelRenderable.builder()
+                .setSource(arFragment.getContext(), uri)
+                .setIsFilamentGltf(true)
+                .build()
+                .thenAccept(modelRenderable -> addNodeToScene(arFragment, anchor, modelRenderable))
+                .exceptionally(throwable -> {
+                            Toast.makeText(arFragment.getContext(), "Error:" + throwable.getMessage(), Toast.LENGTH_LONG).show();
+                            return null;
+                        }
+                );
+    }
+
+    private void addNodeToScene(ArFragment arFragment, Anchor anchor, Renderable renderable) {
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.setRenderable(renderable);
+        node.setParent(anchorNode);
+        arFragment.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
     }
 }

@@ -45,9 +45,6 @@ public class ArFragment extends Fragment {
         binding = FragmentArBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textAr;
-        arViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-
         return root;
     }
     @Override
