@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="12dp"
-    android:layout_marginBottom="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    >
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="12dp">
 
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#f5f5f5"
+        android:background="@color/gunmetal"
         android:columnCount="4"
+        android:orientation="horizontal"
         android:rowCount="3"
 
         >
 
 
-
         <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="64dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:layout_gravity="center_vertical"
-            >
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="64dp"
+            app:cardBackgroundColor="@color/pfp_border">
 
-            <ImageView
-                android:id="@+id/pfp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="userPFP"
-                android:src="@drawable/cat"
-                android:scaleType="centerCrop"
-                />
+            <androidx.cardview.widget.CardView
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="64dp">
+
+                <ImageView
+                    android:id="@+id/pfp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="userPFP"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
 
 
@@ -53,21 +57,23 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
                 android:text="Hello From Post"
-                android:textColor="#0F9D58"
+                android:textColor="@color/ash_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="8dp"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_rowWeight="1"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:layout_column="3">
 
             <LinearLayout
@@ -75,60 +81,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    >
+                    android:layout_marginBottom="6dp">
 
                     <ImageButton
                         android:id="@+id/likeButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:adjustViewBounds="true"
-                        android:contentDescription="Like Post"
-                        />
+                        android:contentDescription="Like Post" />
 
                     <TextView
                         android:id="@+id/likeCount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:textSize="11sp"
-                        android:textColor="#0F9D58"
-                        android:text="likes"
-                        />
+                        android:text="white"
+                        android:textColor="@color/ash_gray"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <ImageButton
                         android:id="@+id/dislikeButton"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:adjustViewBounds="true"
-                        android:contentDescription="Dislike Post"
-                        />
+                        android:contentDescription="Dislike Post" />
 
                     <TextView
                         android:id="@+id/dislikeCount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:textSize="11sp"
-                        android:textColor="#0F9D58"
                         android:text="dislikes"
-                        />
+                        android:textColor="@color/ash_gray"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -136,30 +136,29 @@
 
 
         <LinearLayout
-            android:layout_width="180dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_row="1"
             android:layout_column="0"
             android:layout_columnSpan="2"
             android:layout_columnWeight="2"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="12dp"
             android:orientation="vertical"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="#0F9D58">
 
             <TextView
                 android:id="@+id/username"
-                android:layout_width="match_parent"
+                android:layout_width="85dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="32dp"
                 android:autoSizeTextType="uniform"
                 android:text="name"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="#0F9D58"
-                android:textSize="16sp"
-                />
+                android:textColor="@color/aquamarine"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/time"
@@ -168,45 +167,42 @@
                 android:layout_gravity="center"
                 android:text="time"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="#0F9D58" />
+                android:textColor="@color/aquamarine"
+                android:textFontWeight="700" />
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="date"
-                android:textColor="#0F9D58" />
+                android:textColor="@color/ash_gray" />
 
         </LinearLayout>
-
-
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_column="2"
             android:layout_row="1"
-            android:layout_gravity="center|start"
-            >
+            android:layout_column="1"
+            android:layout_gravity="center|end"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/commentsButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="57dp"
+                android:layout_height="52dp"
                 android:clickable="true"
                 android:contentDescription="Comments"
-                android:requiresFadingEdge="vertical"
-                />
+                android:requiresFadingEdge="vertical" />
 
             <TextView
                 android:id="@+id/comments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="comments"
                 android:textAlignment="center"
-                android:textColor="#0F9D58"
-                android:text="comments" />
+                android:textColor="@color/aquamarine" />
         </LinearLayout>
 
 
@@ -218,14 +214,15 @@
             android:layout_column="2"
             android:layout_columnSpan="2"
             android:layout_columnWeight="2"
-            android:layout_gravity="center|end"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="18dp"
             android:text="location"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="#0F9D58" />
+            android:textColor="@color/aquamarine"
+            android:textSize="14sp" />
 
     </GridLayout>
 </androidx.cardview.widget.CardView>

@@ -1,19 +1,34 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
+import static ie.thirdfloor.csis.ul.laedsgo.ui.Cache.profileNamesCache;
+import static ie.thirdfloor.csis.ul.laedsgo.ui.Cache.profilePhotosCache;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.icu.text.SimpleDateFormat;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
@@ -22,10 +37,15 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CommentFragment;
 import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link DiscoveryPostModel}.
@@ -33,34 +53,32 @@ import java.util.List;
  */
 public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerViewAdapter.MyPostViewHolder> {
 
+    private final ProfileCollection profileCollection = new ProfileCollection();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final TOLPostCollection postCollection = new TOLPostCollection();
+    public static final String TAG = "PostRecyclerViewAdapter";
+    private static final CommentConnection commentCollection = new CommentConnection();
     Context context;
     private List<DiscoveryPostModel> postModels;
+    private final MutableLiveData<IDocument> loggedInUser;
+    public int itemCount = 0;
 
-    private ProfileCollection profileCollection = new ProfileCollection();
 
-    private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
-    private static TOLPostCollection postCollection = new TOLPostCollection();
-
-    private static CommentConnection commentCollection = new CommentConnection();
-
-    public PostRecyclerViewAdapter(Context contenxt, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
+    public PostRecyclerViewAdapter(Context context, List<DiscoveryPostModel> items, MutableLiveData<IDocument> loggedInUser) {
         this.postModels = items;
-        this.context = contenxt;
+        this.context = context;
         this.loggedInUser = loggedInUser;
-
-    }
-
-    public void clearArray(){
-        this.postModels = new ArrayList<>();
     }
 
     public void setArray(ArrayList<DiscoveryPostModel> array){
         this.postModels = array;
+        itemCount = array.size();
     }
-    public static final String TAG = "PostRecyclerViewAdapter";
 
+
+    @NonNull
     @Override
-    public MyPostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyPostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate view: parse the XML and apply the binding.
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.fragment_post_row, parent, false);
@@ -70,7 +88,14 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(final MyPostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyPostViewHolder holder, int position) {
+
+
+        if(loggedInUser.getValue() == null){
+            // We need to return here because we can't do anything without a logged in user
+            return;
+        }
+
         // Function responsible for assigning values to each
         // view as they are coming onto the screen based on their index
         // IN THE RECYCLE VIEW
@@ -79,24 +104,75 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         DiscoveryPostModel model = postModels.get(position);
 
         // Simple binding
-        holder.tvName.setText(model.getUsername());
-        holder.tvLocation.setText(model.getLocation());
+        loadLocation(holder, model.getLocation());
+
         holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
         holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         holder.tvContent.setText(model.getContent());
 
-        String[] dateTime = model.getTime().split(" ");
+        String timestamp = model.getTime();
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd/MMM/yyyy", Locale.US);
 
-        holder.tvTime.setText(dateTime[0]);
-        holder.tvDate.setText(dateTime[1]);
+        try{
+            Date date = inputFormat.parse(timestamp);
+
+            String[] dateTime = outputFormat.format(date).split(" ");
+
+            holder.tvTime.setText(dateTime[0]);
+            holder.tvDate.setText(dateTime[1].replace("/", " "));
+
+        }catch (ParseException e){
+            holder.tvTime.setText(R.string.error);
+            holder.tvDate.setText(R.string.error);
+        }
 
         // Button Setups
+
 
         //Check if user has previously liked the post:
         ArrayList<Integer> likedPosts = ((ProfileDocument) loggedInUser.getValue()).likedPosts;
         ArrayList<Integer> dislikedPosts = ((ProfileDocument) loggedInUser.getValue()).dislikedPosts;
 
+        Integer userId = Integer.parseInt(model.getUserId());
+        // Profile Picture
+
+        if(profilePhotosCache.containsKey(userId)) {
+            byte[] decodedString = Base64.decode(profilePhotosCache.get(userId), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.profilePicture.setImageBitmap(decodedByte);
+        }else{
+            MutableLiveData<IDocument> pfp = new MutableLiveData<>();
+
+            pfp.observe((AppCompatActivity) context, document -> {
+                ProfileDocument profileDocument = (ProfileDocument) document;
+                byte[] decodedString = Base64.decode(profileDocument.profilePhoto, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                holder.profilePicture.setImageBitmap(decodedByte);
+                profilePhotosCache.put(userId, profileDocument.profilePhoto);
+            });
+
+            profileCollection.getUserById(Integer.parseInt(model.getUserId()), pfp);
+        }
+
+        // Set name
+        if(profileNamesCache.containsKey(userId)) {
+            holder.tvName.setText(profileNamesCache.get(userId));
+        }else{
+            MutableLiveData<IDocument> name = new MutableLiveData<>();
+
+            name.observe((AppCompatActivity) context, document -> {
+                ProfileDocument profileDocument = (ProfileDocument) document;
+                holder.tvName.setText(profileDocument.name);
+                profileNamesCache.put(userId, profileDocument.name);
+            });
+
+            profileCollection.getUserById(Integer.parseInt(model.getUserId()), name);
+        }
+
+
+        // Like Buttons
         if(likedPosts.contains(model.getId())){
             model.setLiked();
         } else if (dislikedPosts.contains(model.getId())) {
@@ -104,155 +180,181 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         }
 
         if(model.isLiked()){
-            holder.ibLike.setBackgroundResource(R.drawable.colour_like);
+            holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
         }else{
             holder.ibLike.setBackgroundResource(R.drawable.like);
         }
 
 
         if(model.isDisliked()){
-            holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
+            holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
         }else{
             holder.ibDislike.setBackgroundResource(R.drawable.dislike);
         }
 
-        holder.ibComment.setBackgroundResource(R.drawable.chat);
+        holder.ibComment.setBackgroundResource(R.drawable.comment);
 
         // button actions setup
 
         // Like
-        holder.ibLike.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+        holder.ibLike.setOnClickListener(v -> {
+            ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
 
-                Log.i(TAG, "onClick: " + model.getId());
-                model.setLiked(!model.isLiked());
-                Log.i(TAG, "onClick: " + model.isLiked());
+            model.setLiked(!model.isLiked());
 
-                if(model.checkIfPostIsLikedAndDisliked()){
-                    model.setLiked();
+            if(model.checkIfPostIsLikedAndDisliked()){
+                model.setLiked();
 
-                    accountState.dislikedPosts.remove(model.getId());
-                    postCollection.incrementDislike(model.getId(), -1);
-                    model.decrementDislikes();
-                }
-
-                if(model.isLiked()){
-                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
-                    postCollection.incrementLike(model.getId(), 1);
-                    model.incrementLikes();
-                }else{
-                    holder.ibLike.setBackgroundResource(R.drawable.like);
-                    postCollection.incrementLike(model.getId(), -1);
-                    model.decrementLikes();
-                }
-                if(model.isDisliked()){
-                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
-                }else{
-                    holder.ibDislike.setBackgroundResource(R.drawable.dislike);
-                }
-
-                if(accountState != null){
-                    if(accountState.likedPosts.contains(model.getId())){
-                        accountState.likedPosts.remove(model.getId());
-                    }else{
-                        accountState.likedPosts.add(model.getId());
-
-                    }
-                    profileCollection.update(loggedInUser);
-                }
-
-                // Update Counters
-                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
-                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
+                accountState.dislikedPosts.remove(model.getId());
+                postCollection.incrementDislike(model.getId(), -1);
+                model.decrementDislikes();
             }
+
+            if(model.isLiked()){
+                holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
+                postCollection.incrementLike(model.getId(), 1);
+                model.incrementLikes();
+            }else{
+                holder.ibLike.setBackgroundResource(R.drawable.like);
+                postCollection.incrementLike(model.getId(), -1);
+                model.decrementLikes();
+            }
+            if(model.isDisliked()){
+                holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
+            }else{
+                holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+            }
+
+            if(accountState != null){
+                if(accountState.likedPosts.contains(model.getId())){
+                    accountState.likedPosts.remove(model.getId());
+                }else{
+                    accountState.likedPosts.add(model.getId());
+
+                }
+                profileCollection.update(loggedInUser);
+            }
+
+            // Update Counters
+            holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+            holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         });
 
         // Dislike
-        holder.ibDislike.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
+        holder.ibDislike.setOnClickListener(v -> {
+            ProfileDocument accountState = (ProfileDocument) loggedInUser.getValue();
 
-                Log.i(TAG, "onClick: " + model.getId());
-                model.setDisliked(!model.isDisliked());
-                Log.i(TAG, "onClick: " + model.isDisliked());
+            model.setDisliked(!model.isDisliked());
 
-                if(model.checkIfPostIsLikedAndDisliked()){
-                    model.setDisliked();
+            if(model.checkIfPostIsLikedAndDisliked()){
+                model.setDisliked();
 
-                    accountState.likedPosts.remove(model.getId());
-                    postCollection.incrementLike(model.getId(), -1);
+                accountState.likedPosts.remove(model.getId());
+                postCollection.incrementLike(model.getId(), -1);
 
-                    model.decrementLikes();
-                }
-
-                if(model.isDisliked()){
-                    holder.ibDislike.setBackgroundResource(R.drawable.colour_dislike);
-                    postCollection.incrementDislike(model.getId(), 1);
-                    model.incremenetDislikes();
-
-
-                }else{
-                    holder.ibDislike.setBackgroundResource(R.drawable.dislike);
-                    postCollection.incrementDislike(model.getId(), -1);
-                    model.decrementDislikes();
-
-                }
-                if(model.isLiked()){
-                    holder.ibLike.setBackgroundResource(R.drawable.colour_like);
-                }else{
-                    holder.ibLike.setBackgroundResource(R.drawable.like);
-                }
-
-                if(accountState != null){
-                    if(accountState.dislikedPosts.contains(model.getId())){
-                        accountState.dislikedPosts.remove(model.getId());
-                    }else{
-                        accountState.dislikedPosts.add(model.getId());
-                    }
-                    profileCollection.update(loggedInUser);
-                }
-
-
-                // Update Counters
-                holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
-                holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
+                model.decrementLikes();
             }
+
+            if(model.isDisliked()){
+                holder.ibDislike.setBackgroundResource(R.drawable.dislike_coloured);
+                postCollection.incrementDislike(model.getId(), 1);
+                model.incremenetDislikes();
+
+
+            }else{
+                holder.ibDislike.setBackgroundResource(R.drawable.dislike);
+                postCollection.incrementDislike(model.getId(), -1);
+                model.decrementDislikes();
+
+            }
+            if(model.isLiked()){
+                holder.ibLike.setBackgroundResource(R.drawable.like_coloured);
+            }else{
+                holder.ibLike.setBackgroundResource(R.drawable.like);
+            }
+
+            if(accountState != null){
+                if(accountState.dislikedPosts.contains(model.getId())){
+                    accountState.dislikedPosts.remove(model.getId());
+                }else{
+                    accountState.dislikedPosts.add(model.getId());
+                }
+                profileCollection.update(loggedInUser);
+            }
+
+
+            // Update Counters
+            holder.tvLikeCount.setText(String.valueOf(model.getLikes()));
+            holder.tvDislikeCount.setText(String.valueOf(model.getDislikes()));
         });
 
         // Comment
-        holder.ibComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: Comments");
-                int postId = model.getId();
-                MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
-                // commentCollection.getAllCommentsByParentId(postId, comments);
+        holder.ibComment.setOnClickListener(v -> {
+            int postId = model.getId();
+            CommentFragment.postId = postId;
 
-                // todo: Inject the info into the comments fragment
-                //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
-            }
+            NavHostFragment navHostFragment = (NavHostFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+            navHostFragment.getNavController().navigate(R.id.commentFragment);
+
         });
 
         // Profile Picture click
-        holder.profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: ProfilePicture");
+        holder.profilePicture.setOnClickListener(v -> {
 
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                FragmentManager fragmentManager = activity.getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
+            AppCompatActivity activity = (AppCompatActivity) v.getContext();
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+            ViewProfileFragment profileFragment = ViewProfileFragment.newInstance(model.getUserId());
 
-                transaction.replace(R.id.discoveryPostsRootFragment, ViewProfileFragment.newInstance());
-                transaction.addToBackStack("viewProfileTransaction");
-                transaction.commit();
+            transaction.replace(R.id.discoveryPostsRootFragment, profileFragment);
+            transaction.addToBackStack("viewProfileTransaction");
+            transaction.commit();
 
-            }
         });
+
+        if(model.getCommentCount() == null){
+            holder.tvCommentCount.setText("0");
+        }else{
+            holder.tvCommentCount.setText(model.getCommentCount().toString());
+        }
+    }
+
+    public static String getCountryName(Context context, String location) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses;
+
+        try {
+            String[] locationArray = location.split(", ");
+            float latitude = Float.parseFloat(locationArray[0]);
+            float longitude = Float.parseFloat(locationArray[1]);
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addresses != null && !addresses.isEmpty()) {
+                Address bestMatch = addresses.get(0);
+                return bestMatch.getFeatureName() + ", " + bestMatch.getLocality() + ", "  + bestMatch.getCountryName();
+            }
+            return "";
+        } catch (IOException ignored) {
+            return "";
+        }
+    }
+
+    private void loadLocation(MyPostViewHolder holder, String location){
+        if (location.startsWith("null")) {
+            holder.tvLocation.setText("");
+            return;
+        }
+
+        holder.tvLocation.setText(R.string.loading);
+
+        // Set off asynchronous task in the background
+        CompletableFuture.supplyAsync(() -> getCountryName(context, location), executor)
+                // Once the task is done, update the UI
+                .thenAcceptAsync(countryName -> holder.itemView.post(() -> {
+                    // Update UI on the main thread
+                    holder.tvLocation.setText(countryName);
+                }), Runnable::run);
     }
 
 
@@ -268,7 +370,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // assign it to each field. Basically onCreate
 
         ImageView profilePicture;
-        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount;
+        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount, tvCommentCount;
 
         ImageButton ibLike, ibDislike, ibComment;
 
@@ -286,14 +388,17 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             tvLocation = rowView.findViewById(R.id.location);
             tvTime = rowView.findViewById(R.id.time);
             tvDate = rowView.findViewById(R.id.date);
+            tvCommentCount = rowView.findViewById(R.id.comments);
 
             // Buttons
             ibLike = rowView.findViewById(R.id.likeButton);
             ibDislike = rowView.findViewById(R.id.dislikeButton);
             ibComment = rowView.findViewById(R.id.commentsButton);
+
         }
 
 
+        @NonNull
         @Override
         public String toString() {
             return super.toString() + " '" + "mContentView.getText()" + "'";

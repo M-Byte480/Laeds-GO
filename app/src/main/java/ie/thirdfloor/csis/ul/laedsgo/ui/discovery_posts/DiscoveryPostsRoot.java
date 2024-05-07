@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,8 +23,8 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 public class DiscoveryPostsRoot extends Fragment {
     private static final String TAG = "DiscoveryPostsRoot";
     private FragmentDiscoveryPostsRootBinding binding;
-    private MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
-    private ProfileCollection profileCollection = new ProfileCollection();
+    private final MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
+    private final ProfileCollection profileCollection = new ProfileCollection();
     public DiscoveryPostsRoot() {
         // Required empty public constructor
     }
@@ -43,6 +44,16 @@ public class DiscoveryPostsRoot extends Fragment {
         if(savedInstanceState != null){
             Log.i(TAG, "onViewCreated: savedInstance");
         }
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+
+                Navigation.findNavController(requireView()).navigate(R.id.map);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
 
@@ -63,12 +74,7 @@ public class DiscoveryPostsRoot extends Fragment {
 
         Button goToPostsButton = view.findViewById(R.id.makePostBtn);
 
-        goToPostsButton.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Navigation.findNavController(v).navigate(R.id.make_post);
-            }
-        }));
+        goToPostsButton.setOnClickListener((v -> Navigation.findNavController(v).navigate(R.id.make_post)));
 
         if(savedInstanceState != null){
             Log.i(TAG, "onViewCreated: savedInstance");

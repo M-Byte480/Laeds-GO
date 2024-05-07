@@ -14,6 +14,7 @@ public class TOLPostDocument implements IDocument {
     public String message = "";
     public Date timestamp = new Date();
     public Map<String, Float> location = new HashMap<>();
+    public Integer commentCount = 0;
 
     @Override
     public String toString() {
