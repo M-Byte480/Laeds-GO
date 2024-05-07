@@ -27,6 +27,7 @@
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".ui.commentSection.CommentFragment"
-            tools:listitem="@layout/recycler_view_row" />
+            tools:listitem="@layout/recycler_view_row"
+            android:paddingBottom="60dp"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
