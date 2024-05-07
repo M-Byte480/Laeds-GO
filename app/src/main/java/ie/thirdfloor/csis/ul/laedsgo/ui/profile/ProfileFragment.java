@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Button gotoEditProfileBtn = view.findViewById(R.id.EditBtn);
+        ImageButton gotoEditProfileBtn = view.findViewById(R.id.EditBtn);
 
         gotoEditProfileBtn.setOnClickListener((new View.OnClickListener() {
             @Override
