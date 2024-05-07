@@ -2,7 +2,6 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.maps;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
@@ -57,7 +56,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private boolean markersSet = false;
 
     private ArFragment arFragment;
-    private ModelRenderable modelRenderable;
 
     @SuppressLint("MissingPermission")
     private void onMapReady(GoogleMap googleMap) {
