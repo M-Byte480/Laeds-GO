@@ -312,6 +312,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             transaction.commit();
 
         });
+
+        if(model.getCommentCount() == null){
+            holder.tvCommentCount.setText("0");
+        }else{
+            holder.tvCommentCount.setText(model.getCommentCount().toString());
+        }
     }
 
     public static String getCountryName(Context context, String location) {
@@ -364,7 +370,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // assign it to each field. Basically onCreate
 
         ImageView profilePicture;
-        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount;
+        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount, tvCommentCount;
 
         ImageButton ibLike, ibDislike, ibComment;
 
@@ -382,11 +388,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             tvLocation = rowView.findViewById(R.id.location);
             tvTime = rowView.findViewById(R.id.time);
             tvDate = rowView.findViewById(R.id.date);
+            tvCommentCount = rowView.findViewById(R.id.comments);
 
             // Buttons
             ibLike = rowView.findViewById(R.id.likeButton);
             ibDislike = rowView.findViewById(R.id.dislikeButton);
             ibComment = rowView.findViewById(R.id.commentsButton);
+
         }
 
 

@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.commentSection;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -79,9 +80,18 @@ public class CommentFragment extends Fragment {
                 NavHostFragment navHostFragment = (NavHostFragment) ((AppCompatActivity) getContext()).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
                 navHostFragment.getNavController().navigate(R.id.createComment);
             }
-
-
         });
+
+        // On back swipe go to the posts
+        OnBackPressedCallback callback = new OnBackPressedCallback(true ) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment navHostFragment = (NavHostFragment) ((AppCompatActivity) getContext()).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+                navHostFragment.getNavController().navigate(R.id.messages);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
         comments.observe(getViewLifecycleOwner(), new Observer<ArrayList<IDocument>>() {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {

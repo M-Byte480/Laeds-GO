@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.commentSection;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,6 +18,7 @@ import ie.thirdfloor.csis.ul.laedsgo.ProfileInfo.ProfileInfo;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentDocument;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +27,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.comments.CommentDocument;
  */
 public class CreateCommentFragment extends Fragment {
 
+    private static final TOLPostCollection postCollection = new TOLPostCollection();
 
     public static int postId = 0;
     EditText commentText;
@@ -44,6 +47,14 @@ public class CreateCommentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(CreateCommentFragment.this)
+                        .navigate(R.id.commentFragment);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
@@ -66,6 +77,7 @@ public class CreateCommentFragment extends Fragment {
             commentDocument.message = commentText.getText().toString();
             commentDocument.parentId = -1;
             commentDocument.postId = postId;
+            postCollection.incrementCommentCount(postId);
             CommentConnection commentConnection = new CommentConnection();
             Log.i("CreateComment", "onCreateView: " + commentDocument.toString());
             commentConnection.push(commentDocument);
