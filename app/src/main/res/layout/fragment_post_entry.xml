@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/defaultpage2">
 
         <EditText
             android:id="@+id/user_input"
@@ -27,16 +28,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/user_input_border"
+            android:background="@drawable/textview_border"
             android:padding="6dp"
             />
 
-        <Button
+        <ImageButton
             android:id="@+id/publishBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="17dp"
+            android:layout_width="140dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="497dp"
+            android:background="@drawable/publish_btn"
+            android:contentDescription=""
             android:text="Publish"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

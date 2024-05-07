@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.edit.ProfileEditFragment"
     tools:layout_editor_absoluteX="-4dp"
-    tools:layout_editor_absoluteY="85dp">
+    tools:layout_editor_absoluteY="85dp"
+    android:background="@drawable/defaultpage2">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -25,7 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="Profile Picture"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="@color/LaedsGo2"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,14 +53,17 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
+            <ImageButton
                 android:id="@+id/selectProfilePictureBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="35dp"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                android:text="Select" />
+                android:background="@drawable/select_button"
+                android:contentDescription=""
+                android:text="Select"
+                android:textColor="@color/LaedsGo2" />
         </LinearLayout>
 
         <TextView
@@ -67,22 +72,26 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="Username"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="@color/LaedsGo2"/>
 
         <EditText
             android:id="@+id/editUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/LaedsGo2"
             android:ems="10"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            />
 
         <TextView
             android:id="@+id/textBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/LaedsGo2"
             android:text="Bio"
             android:textSize="16dp" />
 
@@ -91,17 +100,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/LaedsGo2"
             android:ems="10"
             android:inputType="text"
             android:minHeight="48dp" />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/saveBtn"
-        android:layout_width="193dp"
-        android:layout_height="wrap_content"
+        android:layout_width="170dp"
+        android:layout_height="34dp"
         android:layout_marginTop="197dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/save_button"
+        android:contentDescription=""
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
@@ -109,12 +121,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-    <Button
+    <ImageButton
         android:id="@+id/cancelBtn"
-        android:layout_width="194dp"
-        android:layout_height="wrap_content"
+        android:layout_width="170dp"
+        android:layout_height="34dp"
         android:layout_marginTop="197dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/cancel_button"
+        android:contentDescription=""
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

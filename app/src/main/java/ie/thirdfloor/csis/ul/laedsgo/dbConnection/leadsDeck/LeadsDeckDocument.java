@@ -10,7 +10,7 @@ public class LeadsDeckDocument implements IDocument {
     public String description = "";
     public String model = "";
     public String picture = "";
-    public Integer rarity = 0;
+    public String rarity = "";
     public Date timestamp;
 
     @Override

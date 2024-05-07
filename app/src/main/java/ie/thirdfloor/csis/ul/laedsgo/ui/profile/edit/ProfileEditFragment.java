@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -72,7 +73,7 @@ public class ProfileEditFragment extends Fragment {
 
         setDefaultProfilePhoto();
 
-        Button gotoProfile = view.findViewById(R.id.cancelBtn);
+        ImageButton gotoProfile = view.findViewById(R.id.cancelBtn);
 
         gotoProfile.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -81,7 +82,7 @@ public class ProfileEditFragment extends Fragment {
             }
         }));
 
-        Button saveUpdate = view.findViewById(R.id.saveBtn);
+        ImageButton saveUpdate = view.findViewById(R.id.saveBtn);
 
         saveUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +116,7 @@ public class ProfileEditFragment extends Fragment {
             }
         });
 
-        Button selectImage = view.findViewById(R.id.selectProfilePictureBtn);
+        ImageButton selectImage = view.findViewById(R.id.selectProfilePictureBtn);
 
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
