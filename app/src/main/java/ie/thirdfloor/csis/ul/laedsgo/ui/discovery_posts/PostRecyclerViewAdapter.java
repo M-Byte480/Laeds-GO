@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -35,6 +37,7 @@ import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
+import ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CommentFragment;
 import ie.thirdfloor.csis.ul.laedsgo.ui.view_profile.ViewProfileFragment;
 
 import java.util.ArrayList;
@@ -288,11 +291,11 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // Comment
         holder.ibComment.setOnClickListener(v -> {
             int postId = model.getId();
-            MutableLiveData<ArrayList<IDocument>> comments = new MutableLiveData<>();
-            // commentCollection.getAllCommentsByParentId(postId, comments);
+            CommentFragment.postId = postId;
 
-            // todo: Inject the info into the comments fragment
-            //TemporaryCommentsFragment commentsFragment = TemporaryCommentsFragment.newInstance(comments, v);
+            NavHostFragment navHostFragment = (NavHostFragment) ((AppCompatActivity) context).getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+            navHostFragment.getNavController().navigate(R.id.commentFragment);
+
         });
 
         // Profile Picture click
@@ -309,6 +312,12 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             transaction.commit();
 
         });
+
+        if(model.getCommentCount() == null){
+            holder.tvCommentCount.setText("0");
+        }else{
+            holder.tvCommentCount.setText(model.getCommentCount().toString());
+        }
     }
 
     public static String getCountryName(Context context, String location) {
@@ -361,7 +370,7 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
         // assign it to each field. Basically onCreate
 
         ImageView profilePicture;
-        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount;
+        TextView tvContent, tvLocation, tvName, tvTime, tvDate, tvLikeCount, tvDislikeCount, tvCommentCount;
 
         ImageButton ibLike, ibDislike, ibComment;
 
@@ -379,11 +388,13 @@ public class PostRecyclerViewAdapter extends RecyclerView.Adapter<PostRecyclerVi
             tvLocation = rowView.findViewById(R.id.location);
             tvTime = rowView.findViewById(R.id.time);
             tvDate = rowView.findViewById(R.id.date);
+            tvCommentCount = rowView.findViewById(R.id.comments);
 
             // Buttons
             ibLike = rowView.findViewById(R.id.likeButton);
             ibDislike = rowView.findViewById(R.id.dislikeButton);
             ibComment = rowView.findViewById(R.id.commentsButton);
+
         }
 
 

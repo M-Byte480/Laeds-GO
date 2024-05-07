@@ -141,6 +141,7 @@ public class PostFragment extends Fragment {
                 false, false,
                 p.message,
                 p.location.get("lat") + ", " + p.location.get("lon"),
-                p.timestamp.toString());
+                p.timestamp.toString(),
+                p.commentCount);
     }
 }

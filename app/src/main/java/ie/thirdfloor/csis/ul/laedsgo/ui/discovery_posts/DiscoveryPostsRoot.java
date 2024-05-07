@@ -2,6 +2,7 @@ package ie.thirdfloor.csis.ul.laedsgo.ui.discovery_posts;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -43,6 +44,16 @@ public class DiscoveryPostsRoot extends Fragment {
         if(savedInstanceState != null){
             Log.i(TAG, "onViewCreated: savedInstance");
         }
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+
+                Navigation.findNavController(requireView()).navigate(R.id.map);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
 
