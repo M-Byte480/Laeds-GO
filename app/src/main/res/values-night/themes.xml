@@ -15,7 +15,7 @@
     </style>
     <style name="FirebaseUI.AuthMethodPicker" parent="FirebaseUI">
         <!-- Set the background color -->
-        <item name="android:windowBackground">@drawable/defaultpage</item>
+        <item name="android:windowBackground">@drawable/default_page</item>
         <!-- Other customization options -->
     </style>
 </resources>

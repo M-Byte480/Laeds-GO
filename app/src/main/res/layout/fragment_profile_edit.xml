@@ -8,7 +8,7 @@
     tools:context=".ui.profile.edit.ProfileEditFragment"
     tools:layout_editor_absoluteX="-4dp"
     tools:layout_editor_absoluteY="85dp"
-    android:background="@drawable/defaultpage2">
+    android:background="@drawable/default_page2">
 
     <LinearLayout
         android:id="@+id/linearLayout2"

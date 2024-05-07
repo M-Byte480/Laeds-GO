@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment"
-    android:background="@drawable/defaultpage2">
+    android:background="@drawable/default_page2">
 
 
     <androidx.cardview.widget.CardView
@@ -80,7 +80,7 @@
         android:id="@+id/EditBtn"
         android:layout_width="109dp"
         android:layout_height="39dp"
-        android:background="@drawable/editbutton"
+        android:background="@drawable/edit_button"
         android:contentDescription=""
         android:text="Edit"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,7 +95,7 @@
         android:layout_width="109dp"
         android:layout_height="39dp"
         android:layout_marginTop="28dp"
-        android:background="@drawable/logoutbutton"
+        android:background="@drawable/logout_button"
         android:contentDescription=""
         android:text="Logout"
         app:layout_constraintBottom_toBottomOf="parent"
