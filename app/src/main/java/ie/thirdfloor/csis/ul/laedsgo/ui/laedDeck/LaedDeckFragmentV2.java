@@ -78,7 +78,9 @@ public class LaedDeckFragmentV2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_laed_deck_v2_list, container, false);
         recycler = view.findViewById(R.id.laedDeckList);
         adapter = new MyLaedRecyclerViewAdapter(elements.getValue());
-        setupPostsModels(view, inflater);
+        if(elements.getValue() == null || elements.getValue().size() == 0){
+            setupPostsModels(view, inflater);
+        }
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -98,9 +100,6 @@ public class LaedDeckFragmentV2 extends Fragment {
         elements.observe(getViewLifecycleOwner(), new Observer<ArrayList<IDocument>>() {
             @Override
             public void onChanged(ArrayList<IDocument> iDocuments) {
-
-//                iDocuments.sort(Collections.reverseOrder());
-
                 recycler = view.findViewById(R.id.laedDeckList);
                 adapter.setLaeds(iDocuments);
                 recycler.setAdapter(adapter);

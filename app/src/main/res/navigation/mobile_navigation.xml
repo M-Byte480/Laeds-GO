@@ -77,4 +77,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.commentSection.CreateCommentFragment"
         android:label="CreateComment"
         tools:layout="@layout/fragment_create_comment" />
+
+    <fragment
+        android:id="@+id/statsFragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.laedDeck.LaedDeckStatsFragment"
+        android:label="Stats"
+        tools:layout="@layout/fragment_laed_deck_stats2" />
 </navigation>

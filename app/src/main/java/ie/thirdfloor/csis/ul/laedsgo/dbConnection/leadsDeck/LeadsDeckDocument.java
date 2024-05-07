@@ -10,8 +10,8 @@ public class LeadsDeckDocument implements IDocument, Comparable<LeadsDeckDocumen
     public String name = "";
     public String description = "";
     public String model = "";
-    public String picture = "";
-    public Integer rarity = 0;
+    public String picture ="";
+    public String rarity = "";
     public Date timestamp;
 
     @Override
