@@ -22,13 +22,13 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
     private String time;
 
     private ArrayList<Object> comments;
-    private int commentCount;
+    private Integer commentCount;
 
     public DiscoveryPostModel(){
 
     }
 
-    public DiscoveryPostModel(Integer id, String userId, String username, int likes, int dislikes, boolean isLiked, boolean isDisliked, String content, String location, String time) {
+    public DiscoveryPostModel(Integer id, String userId, String username, int likes, int dislikes, boolean isLiked, boolean isDisliked, String content, String location, String time, Integer commentCount) {
         this.id = id;
         this.userId = userId;
         this.username = username;
@@ -39,6 +39,7 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
         this.content = content;
         this.location = location;
         this.time = time;
+        this.commentCount = commentCount;
     }
 
 
@@ -150,7 +151,7 @@ public class DiscoveryPostModel implements Comparable<DiscoveryPostModel> {
         this.comments = comments;
     }
 
-    public int getCommentCount() {
+    public Integer getCommentCount() {
         return commentCount;
     }
 

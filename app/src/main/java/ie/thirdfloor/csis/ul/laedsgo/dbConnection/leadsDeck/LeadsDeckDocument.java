@@ -3,13 +3,14 @@ package ie.thirdfloor.csis.ul.laedsgo.dbConnection.leadsDeck;
 import java.util.Date;
 
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
+import ie.thirdfloor.csis.ul.laedsgo.entities.LaedDeckModel;
 
-public class LeadsDeckDocument implements IDocument {
+public class LeadsDeckDocument implements IDocument, Comparable<LeadsDeckDocument> {
     public Integer leadId = 0;
     public String name = "";
     public String description = "";
     public String model = "";
-    public String picture = "";
+    public String picture ="";
     public String rarity = "";
     public Date timestamp;
 
@@ -24,5 +25,9 @@ public class LeadsDeckDocument implements IDocument {
                 ", rarity=" + rarity +
                 ", timestamp=" + timestamp +
                 '}';
+    }
+
+    public int compareTo(LeadsDeckDocument lad) {
+        return 0;
     }
 }

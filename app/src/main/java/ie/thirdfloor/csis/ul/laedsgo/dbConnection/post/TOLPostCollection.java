@@ -1,7 +1,5 @@
 package ie.thirdfloor.csis.ul.laedsgo.dbConnection.post;
 
-import static android.content.ContentValues.TAG;
-
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -115,6 +113,12 @@ public class TOLPostCollection implements ICollectionConnection {
                 .update("dislikes", FieldValue.increment(incr));
     }
 
+    public void incrementCommentCount(Integer id){
+        dbConnection.db.collection("tolPost")
+                .document(String.valueOf(id))
+                .update("commentCount", FieldValue.increment(1));
+    }
+
     private Map<String, Object> convertDocumentToMap(TOLPostDocument item, Integer docId) {
         Map<String, Object> newDoc = new HashMap<>();
 
@@ -125,6 +129,7 @@ public class TOLPostCollection implements ICollectionConnection {
         newDoc.put("message", item.message);
         newDoc.put("timestamp", item.timestamp);
         newDoc.put("location", item.location);
+        newDoc.put("commentCount", item.commentCount);
 
         return newDoc;
     }

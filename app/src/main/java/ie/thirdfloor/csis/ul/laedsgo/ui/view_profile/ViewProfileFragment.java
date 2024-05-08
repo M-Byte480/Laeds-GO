@@ -111,7 +111,4 @@ public class ViewProfileFragment extends Fragment {
 
         fragmentTransaction.remove(this).commit();
     }
-
-
-
 }
