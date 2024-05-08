@@ -6,13 +6,15 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     app:cardCornerRadius="12dp">
 
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gunmetal"
+        android:background="@color/LaedsGo5"
         android:columnCount="4"
         android:orientation="horizontal"
         android:rowCount="3"
@@ -26,7 +28,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             app:cardCornerRadius="64dp"
-            app:cardBackgroundColor="@color/pfp_border">
+            app:cardBackgroundColor="@color/LaedsGo2">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="105dp"
@@ -61,7 +63,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
                 android:text="Hello From Post"
-                android:textColor="@color/ash_gray"
+                android:textColor="@color/LaedsGo2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +99,8 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:adjustViewBounds="true"
-                        android:contentDescription="Like Post" />
+                        android:contentDescription="Like Post"
+                        app:tint="@color/LaedsGo2"/>
 
                     <TextView
                         android:id="@+id/likeCount"
@@ -105,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="white"
-                        android:textColor="@color/ash_gray"
+                        android:textColor="@color/LaedsGo2"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -127,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="dislikes"
-                        android:textColor="@color/ash_gray"
+                        android:textColor="@color/LaedsGo2"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -157,7 +160,7 @@
                 android:autoSizeTextType="uniform"
                 android:text="name"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@color/aquamarine"
+                android:textColor="@color/LaedsGo2"
                 android:textSize="16sp" />
 
             <TextView
@@ -167,7 +170,7 @@
                 android:layout_gravity="center"
                 android:text="time"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@color/aquamarine"
+                android:textColor="@color/LaedsGo2"
                 android:textFontWeight="700" />
 
             <TextView
@@ -175,7 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="date"
-                android:textColor="@color/ash_gray" />
+                android:textColor="@color/LaedsGo2" />
 
         </LinearLayout>
 
@@ -198,11 +201,11 @@
 
             <TextView
                 android:id="@+id/comments"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="comments"
+                android:text="comment"
                 android:textAlignment="center"
-                android:textColor="@color/aquamarine" />
+                android:textColor="@color/LaedsGo2" />
         </LinearLayout>
 
 
@@ -221,7 +224,7 @@
             android:text="location"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textColor="@color/aquamarine"
+            android:textColor="@color/LaedsGo2"
             android:textSize="14sp" />
 
     </GridLayout>

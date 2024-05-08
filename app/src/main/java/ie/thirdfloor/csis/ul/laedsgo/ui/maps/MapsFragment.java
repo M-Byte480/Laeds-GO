@@ -1,7 +1,11 @@
 package ie.thirdfloor.csis.ul.laedsgo.ui.maps;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
@@ -22,7 +26,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
@@ -53,9 +59,62 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
         mymap.setMyLocationEnabled(true);
         mymap.setInfoWindowAdapter(new MapsInfoWindowAdaptor(requireContext()));
         googleMap.setOnInfoWindowClickListener(this);
+        mymap.getUiSettings().setScrollGesturesEnabled(false);
         if (!markersSet) addLeadsToMap();
         markersSet = true;
+
+        try {
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this.requireContext(), R.raw.maps_style));
+
+            if (!success) {
+                Log.e(TAG,"Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+
+        // Get the user's location
+        fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+            if (location != null) {
+                LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+                // Set the camera's tilt
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(userLocation) // Sets the center of the map to the user's location
+                        .zoom(17)
+                        .bearing(90) // North/South/East/West orientation 90* is east
+                        .tilt(30) // Sets the tilt of the camera to 30 degrees for a 3D effect
+                        .build();
+                mymap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
+
+        mymap.setOnMapClickListener(latLng -> {
+            // When the map is clicked (not on a marker), move the camera back to the user's location
+            fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+                if (location != null) {
+                    LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    mymap.animateCamera(CameraUpdateFactory.newLatLng(userLocation));
+                }
+            });
+        });
+
+        LocationRequest myLocation = LocationRequest.create();
+        myLocation.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        myLocation.setInterval(1000);//updates every second
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                for (Location l : locationResult.getLocations()){
+                    LatLng userLocation = new LatLng(l.getLatitude(), l.getLongitude());
+                    mymap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));}
+            }
+        };
     }
+
 
     private LatLng addNoiseToLocation(LatLng location) {
         double lati = location.latitude + (Math.random()*0.001f - 0.0005f);

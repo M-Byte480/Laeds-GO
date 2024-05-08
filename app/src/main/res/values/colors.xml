@@ -16,4 +16,11 @@
     <color name="charcoal">#294C60</color>
     <color name="ash_gray">#BFD2BF</color>
     <color name="pfp_border">#8030F3</color>
+    <!-- Laeds go Colours -->
+    <color name="LaedsGo1">#3B8FA9</color>
+    <color name="LaedsGo2">#17413E</color>
+    <color name="LaedsGo3">#7FAC71</color>
+    <color name="LaedsGo4">#4E4187</color>
+    <color name="LaedsGo5">#FFBF69</color>
+
 </resources>

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,7 +113,7 @@ public class PostEntryFragment extends Fragment {
             }
         });
 
-        Button publishBtn = view.findViewById(R.id.publishBtn);
+        ImageButton publishBtn = view.findViewById(R.id.publishBtn);
 
         publishBtn.setOnClickListener((v -> {
             String textWithoutLeadingSpaces = multilineTextEdit.getText().toString().trim();
