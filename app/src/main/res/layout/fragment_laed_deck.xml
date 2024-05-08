@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/postsRecyclerViewList"
+            android:id="@+id/ladRecycleViewList"
             android:name="ie.thirdfloor.csis.ul.laedsgo.PostFragmentV2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
