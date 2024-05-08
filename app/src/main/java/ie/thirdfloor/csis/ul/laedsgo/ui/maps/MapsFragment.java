@@ -12,6 +12,8 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -46,10 +48,12 @@ import com.google.ar.sceneform.ux.ArFragment;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.MainActivity;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentMapsBinding;
+import ie.thirdfloor.csis.ul.laedsgo.ui.ar.myArFragment;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.leadsDeck.*;
@@ -61,8 +65,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private final int REQUEST_LOCATION_PERMISSION = 1;
     private ArrayList<LeadsDeckDocument> leadDeck;
     private boolean markersSet = false;
-
-    private ArFragment arFragment;
+    public static int leadID;
 
     @SuppressLint("MissingPermission")
     private void onMapReady(GoogleMap googleMap) {
@@ -180,17 +183,6 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
 
         leadDeck = ((MainActivity) requireActivity()).getLeadsDeck();
 
-        arFragment = new ArFragment();
-        arFragment.setOnTapArPlaneListener(
-                (HitResult hitresult, Plane plane, MotionEvent motionevent) -> {
-                    if (plane.getType() != Plane.Type.HORIZONTAL_UPWARD_FACING)
-                        return;
-
-                    Anchor anchor = hitresult.createAnchor();
-                    placeObject(arFragment, anchor, R.raw.model);
-                }
-        );
-
         return binding.getRoot();
     }
 
@@ -233,31 +225,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     public void onInfoWindowClick(@NonNull Marker marker) {
         Log.d("Maps Fragment", "Opening AR fragment");
 
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(((ViewGroup)getView().getParent()).getId(), arFragment, "ar")
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .commit();
-    }
-    private void placeObject(ArFragment arFragment, Anchor anchor, int uri) {
-        ModelRenderable.builder()
-                .setSource(arFragment.getContext(), uri)
-                .setIsFilamentGltf(true)
-                .build()
-                .thenAccept(modelRenderable -> addNodeToScene(arFragment, anchor, modelRenderable))
-                .exceptionally(throwable -> {
-                            Toast.makeText(arFragment.getContext(), "Error:" + throwable.getMessage(), Toast.LENGTH_LONG).show();
-                            return null;
-                        }
-                );
-    }
+        leadID = Integer.parseInt(Objects.requireNonNull(marker.getTitle()).split(". ")[0]);
 
-    private void addNodeToScene(ArFragment arFragment, Anchor anchor, Renderable renderable) {
-        AnchorNode anchorNode = new AnchorNode(anchor);
-        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
-        node.setRenderable(renderable);
-        node.setParent(anchorNode);
-        arFragment.getArSceneView().getScene().addChild(anchorNode);
-        node.select();
+        Navigation.findNavController(requireView()).navigate(R.id.ar_fragment);
     }
 }

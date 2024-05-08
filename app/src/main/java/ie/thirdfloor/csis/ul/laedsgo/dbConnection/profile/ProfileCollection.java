@@ -230,6 +230,12 @@ public class ProfileCollection implements ICollectionConnection {
                 update("profilePhoto", profilePhoto);
     }
 
+    public void updateLadsSeen(int id, ArrayList<Integer> ladsSeen) {
+        dbConnection.db.collection("profile").
+                document(Integer.toString(id)).
+                update("ladsSeen", ladsSeen);
+    }
+
 
     private Map<String, Object> convertDocumentToMap(ProfileDocument document, Integer id) {
         Map<String, Object> map = new HashMap<String, Object>();

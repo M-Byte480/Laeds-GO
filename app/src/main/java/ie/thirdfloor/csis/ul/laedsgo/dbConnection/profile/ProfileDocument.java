@@ -11,8 +11,8 @@ public class ProfileDocument implements IDocument {
     public int id = 0;
     public String UID = "";
     public String name = "default";
-    public int ladsSeen = 0;
-    public int ladsCaught = 0;
+    public ArrayList<Integer> ladsSeen = new ArrayList<>();
+    public ArrayList<Integer> ladsCaught = new ArrayList<>();
     public String profilePhoto = "";
     public String bio = "";
     public Date timestamp;

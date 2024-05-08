@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="ie.thirdfloor.csis.ul.laedsgo" />
+                  <option name="mobileSdkAppId" value="1:418359748125:android:806fad19c4fc9047e548f4" />
+                  <option name="projectId" value="laeds-go" />
+                  <option name="projectNumber" value="418359748125" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
