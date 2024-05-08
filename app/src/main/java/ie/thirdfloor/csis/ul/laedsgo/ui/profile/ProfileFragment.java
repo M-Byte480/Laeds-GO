@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +71,8 @@ public class ProfileFragment extends Fragment {
 
         profileCollection.get(ProfileInfo.getId(), mProfile);
 
-        Button buttonLogout;
-        buttonLogout =binding.logoutButton;
+        ImageButton buttonLogout;
+        buttonLogout = binding.logoutButton;
 
         //Logout eventListener
         buttonLogout.setOnClickListener(V -> {
@@ -96,7 +97,7 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Button gotoEditProfileBtn = view.findViewById(R.id.EditBtn);
+        ImageButton gotoEditProfileBtn = view.findViewById(R.id.EditBtn);
 
         gotoEditProfileBtn.setOnClickListener((new View.OnClickListener() {
             @Override

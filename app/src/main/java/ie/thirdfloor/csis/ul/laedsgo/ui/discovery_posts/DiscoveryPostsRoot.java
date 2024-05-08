@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentDiscoveryPostsRootBinding;
@@ -72,7 +73,7 @@ public class DiscoveryPostsRoot extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
-        Button goToPostsButton = view.findViewById(R.id.makePostBtn);
+        ImageButton goToPostsButton = view.findViewById(R.id.makePostBtn);
 
         goToPostsButton.setOnClickListener((v -> Navigation.findNavController(v).navigate(R.id.make_post)));
 

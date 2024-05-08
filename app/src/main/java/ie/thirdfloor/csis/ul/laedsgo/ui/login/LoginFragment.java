@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +22,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -36,15 +38,13 @@ public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
 
-    private Button buttonLogIn;
-    private Button buttonLogout;
+    private ImageButton buttonLogIn;
     private FirebaseUser currentUser;
     private static final String TAG = "LoginFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
@@ -61,16 +61,15 @@ public class LoginFragment extends Fragment {
 
         //Grabbing button ids
         //Logout button in fragment_profile.xml
-        buttonLogIn = (Button) root.findViewById(R.id.signInButton);
+        buttonLogIn = (ImageButton) root.findViewById(R.id.signInButton);
 
         //Login eventListener
         buttonLogIn.setOnClickListener(v -> {
-            // Your button click logic here
+            FirebaseAuth.getInstance().signOut();
             System.out.println("Sign in clicked");
             // Choose authentication providers
             List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),
-                    new AuthUI.IdpConfig.PhoneBuilder().build(),
                     new AuthUI.IdpConfig.GoogleBuilder().build()
             );
 
@@ -78,6 +77,8 @@ public class LoginFragment extends Fragment {
             Intent signInIntent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
+                    .setIsSmartLockEnabled(false)
+                    .setTheme(R.style.FirebaseUI_AuthMethodPicker)
                     .build();
             signInLauncher.launch(signInIntent);
         });

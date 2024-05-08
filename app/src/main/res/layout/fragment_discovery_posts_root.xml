@@ -9,21 +9,23 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/default_page2">
 
-        <Button
+        <ImageButton
             android:id="@+id/makePostBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="12dp"
+            android:layout_width="246dp"
+            android:layout_height="48dp"
             android:layout_marginBottom="6dp"
-            android:text="Make a Post"
+            android:background="@drawable/create_post"
+            android:contentDescription=""
+            android:scaleType="centerInside"
+            android:text="Create a post"
             app:layout_constraintBottom_toTopOf="@+id/fragmentContainerView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
