@@ -83,4 +83,10 @@
         android:name="ie.thirdfloor.csis.ul.laedsgo.ui.laedDeck.LaedDeckStatsFragment"
         android:label="Stats"
         tools:layout="@layout/fragment_laed_deck_stats2" />
+    <fragment
+        android:id="@+id/ar_fragment"
+        android:name="ie.thirdfloor.csis.ul.laedsgo.ui.ar.myArFragment"
+        android:label="AR View"
+        tools:layout="@layout/fragment_ar" >
+    </fragment>
 </navigation>

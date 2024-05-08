@@ -2,6 +2,8 @@ package ie.thirdfloor.csis.ul.laedsgo.ProfileInfo;
 
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.ArrayList;
+
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileDocument;
@@ -22,4 +24,9 @@ public class ProfileInfo {
     public static MutableLiveData<IDocument> getProfile() {
         return profile;
     }
+
+    public static ArrayList<Integer> getLadsSeen() {
+        return ((ProfileDocument)profile.getValue()).ladsSeen;
+    }
+
 }

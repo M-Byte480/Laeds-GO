@@ -6,11 +6,14 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.net.Uri;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -18,6 +21,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,15 +36,24 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.ar.core.Anchor;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
+import com.google.ar.sceneform.AnchorNode;
+import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.Renderable;
+import com.google.ar.sceneform.ux.TransformableNode;
+import com.google.ar.sceneform.ux.ArFragment;
 
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.MainActivity;
 import ie.thirdfloor.csis.ul.laedsgo.R;
 import ie.thirdfloor.csis.ul.laedsgo.databinding.FragmentMapsBinding;
+import ie.thirdfloor.csis.ul.laedsgo.ui.ar.myArFragment;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.leadsDeck.*;
@@ -52,6 +65,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     private final int REQUEST_LOCATION_PERMISSION = 1;
     private ArrayList<LeadsDeckDocument> leadDeck;
     private boolean markersSet = false;
+    public static int leadID;
 
     @SuppressLint("MissingPermission")
     private void onMapReady(GoogleMap googleMap) {
@@ -153,6 +167,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
                     }
                 });
     }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -196,7 +211,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     }
 
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
-    public void     requestLocationPermission() {
+    public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if(EasyPermissions.hasPermissions(requireContext(), perms)) {
             Toast.makeText(requireContext(), "Permission already granted", Toast.LENGTH_SHORT).show();
@@ -209,5 +224,9 @@ public class MapsFragment extends Fragment implements GoogleMap.OnInfoWindowClic
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
         Log.d("Maps Fragment", "Opening AR fragment");
+
+        leadID = Integer.parseInt(Objects.requireNonNull(marker.getTitle()).split(". ")[0]);
+
+        Navigation.findNavController(requireView()).navigate(R.id.ar_fragment);
     }
 }
