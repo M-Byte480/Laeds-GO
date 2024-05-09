@@ -112,11 +112,4 @@ public class LaedDeckFragmentV2 extends Fragment {
         laedConnection.getAll(elements);
 
     }
-
-
-//    private LaedDeckModel createPost(LeadsDeckDocument dbDoc) {
-//        return new LaedDeckModel(
-//
-//        )
-//    }
 }
