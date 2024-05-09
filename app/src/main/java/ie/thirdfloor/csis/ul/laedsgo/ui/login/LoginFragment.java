@@ -69,7 +69,6 @@ public class LoginFragment extends Fragment {
             System.out.println("Sign in clicked");
             // Choose authentication providers
             List<AuthUI.IdpConfig> providers = Arrays.asList(
-                    new AuthUI.IdpConfig.EmailBuilder().build(),
                     new AuthUI.IdpConfig.GoogleBuilder().build()
             );
 
