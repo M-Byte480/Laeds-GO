@@ -10,4 +10,7 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.laedDeck.LaedDeckFragmentV2"
-    tools:listitem="@layout/fragment_laed_deck_v2_row" />
+    tools:listitem="@layout/fragment_laed_deck_v2_row"
+
+
+    />
