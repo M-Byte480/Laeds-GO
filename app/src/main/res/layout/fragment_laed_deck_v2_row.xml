@@ -15,11 +15,10 @@
         android:id="@+id/laedRow"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="#f5f5f5"
         android:columnCount="4"
         android:orientation="horizontal"
         android:rowCount="3"
-        >
+        android:background="@color/LaedsGo5">
 
 
         <androidx.cardview.widget.CardView

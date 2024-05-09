@@ -20,7 +20,9 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             tools:context=".ui.discovery_posts.PostFragmentV2"
-            tools:listitem="@layout/fragment_laed_deck_v2_row"/>
+            tools:listitem="@layout/fragment_laed_deck_v2_row"
+            android:background="@drawable/default_page2"
+        />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
