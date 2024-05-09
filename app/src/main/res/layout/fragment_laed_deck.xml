@@ -4,13 +4,15 @@
     android:id="@+id/discoveryPostsRootFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.discovery_posts.DiscoveryPostsRoot">
+    tools:context=".ui.discovery_posts.DiscoveryPostsRoot"
+    >
 
     <!-- Include the SwipeRefreshLayout with RecyclerView here -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ladRecycleViewList"
@@ -21,7 +23,6 @@
             android:layout_marginRight="16dp"
             tools:context=".ui.discovery_posts.PostFragmentV2"
             tools:listitem="@layout/fragment_laed_deck_v2_row"
-            android:background="@drawable/default_page2"
         />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

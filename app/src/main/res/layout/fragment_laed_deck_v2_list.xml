@@ -6,11 +6,11 @@
     android:name="ie.thirdfloor.csis.ul.laedsgo.ui.laedDeck.LaedDeckFragmentV2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.laedDeck.LaedDeckFragmentV2"
     tools:listitem="@layout/fragment_laed_deck_v2_row"
-
+    android:background="@drawable/default_page2"
 
     />
