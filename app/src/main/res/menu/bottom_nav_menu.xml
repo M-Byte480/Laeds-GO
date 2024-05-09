@@ -9,7 +9,7 @@
         android:id="@+id/messages"/>
 
     <item
-        android:title="Forum"
+        android:title="Announcements"
         android:icon="@drawable/baseline_diversity_3_24"
         android:id="@+id/forum"/>
 

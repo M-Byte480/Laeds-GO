@@ -6,7 +6,7 @@ import java.util.Map;
 
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
-public class ForumsDocument implements IDocument {
+public class TOLPostDocument implements IDocument {
     public Integer id = 0;
     public Integer userId = 0;
     public Integer likes = 0;

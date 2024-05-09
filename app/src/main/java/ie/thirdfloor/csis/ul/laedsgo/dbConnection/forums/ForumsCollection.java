@@ -18,7 +18,7 @@ import java.util.Map;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.DBConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.ICollectionConnection;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
-import ie.thirdfloor.csis.ul.laedsgo.dbConnection.forums.ForumsDocument;
+;
 
 public class ForumsCollection implements ICollectionConnection {
 
@@ -61,7 +61,7 @@ public class ForumsCollection implements ICollectionConnection {
 
     @Override
     public void get(int id, MutableLiveData<IDocument> mToForum) {
-        dbConnection.db.collection("forums")
+        dbConnection.db.collection("forms")
                 .whereEqualTo("id", id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -69,7 +69,7 @@ public class ForumsCollection implements ICollectionConnection {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.ForumsDocument doc = document.toObject(ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.ForumsDocument.class);
+                                ForumsDocument doc = document.toObject(ForumsDocument.class);
                                 mToForum.setValue(doc);
                             }
                         } else {
@@ -81,7 +81,7 @@ public class ForumsCollection implements ICollectionConnection {
 
     @Override
     public void getAll(MutableLiveData<ArrayList<IDocument>> mForumsList) {
-        dbConnection.db.collection("forums")
+        dbConnection.db.collection("forms")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -90,7 +90,7 @@ public class ForumsCollection implements ICollectionConnection {
                             ArrayList<IDocument> arrayList = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.ForumsDocument doc = document.toObject(ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.ForumsDocument.class);
+                                ForumsDocument doc = document.toObject(ForumsDocument.class);
                                 arrayList.add(doc);
                             }
 

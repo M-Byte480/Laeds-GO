@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="12dp"
@@ -15,10 +16,11 @@
         android:id="@+id/forumLayout"
         android:layout_width="match_parent"
         android:layout_height="130dp"
-        android:background="#f5f5f5"
+        android:background="@color/LaedsGo5"
         android:columnCount="4"
         android:orientation="horizontal"
         android:rowCount="3"
+
         >
 
 
@@ -26,7 +28,9 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_vertical"
-            app:cardCornerRadius="64dp">
+            app:cardCornerRadius="64dp"
+            android:layout_margin="5dp"
+            >
 
             <ImageView
                 android:id="@+id/forumPfp"
@@ -46,11 +50,11 @@
 
             <TextView
                 android:id="@+id/forumName"
-                android:paddingLeft="10dp"
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:layout_margin="8dp"
                 android:layout_marginTop="4dp"
+                android:paddingLeft="10dp"
                 android:text="name"
                 android:textColor="#0F9D58"
                 android:textSize="16dp" />
@@ -64,12 +68,29 @@
                 android:text="Message"
                 android:textColor="#0F9D58"
                 android:textSize="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/forumName"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/forumName" />
+
+            <TextView
+                android:id="@+id/forumDate"
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+                android:text="Date"
+                android:textColor="#0F9D58"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/forumName" />
+
+            <TextView
+                android:id="@+id/forumTime"
+                android:layout_width="150dp"
+                android:layout_height="20dp"
+
+                android:text="Date"
+                android:textColor="#0F9D58"
+                android:textSize="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/forumName"
+                app:layout_constraintTop_toBottomOf="@+id/forumDate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     </GridLayout>

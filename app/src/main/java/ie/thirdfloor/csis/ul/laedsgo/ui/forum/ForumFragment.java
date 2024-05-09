@@ -19,9 +19,10 @@ import java.util.Collections;
 import java.util.Objects;
 
 import ie.thirdfloor.csis.ul.laedsgo.R;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.forums.ForumsCollection;
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.forums.ForumsDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.TOLPostCollection;
-import ie.thirdfloor.csis.ul.laedsgo.dbConnection.post.ForumsDocument;
 import ie.thirdfloor.csis.ul.laedsgo.dbConnection.profile.ProfileCollection;
 import ie.thirdfloor.csis.ul.laedsgo.entities.DiscoveryPostModel;
 import ie.thirdfloor.csis.ul.laedsgo.entities.ForumPostModel;
@@ -33,9 +34,9 @@ public class ForumFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "1";
     private static final String TAG = "PostFragment";
-    private PostRecyclerViewAdapter adapter;
-    ArrayList<DiscoveryPostModel> postsModels = new ArrayList<>();
-    private static final TOLPostCollection dbConnection = new TOLPostCollection();
+    private forumRecyclerViewAdapter adapter;
+    ArrayList<ForumPostModel> forumModels = new ArrayList<>();
+    private static final ForumsCollection dbConnection = new ForumsCollection();
 
     public MutableLiveData<IDocument> loggedInUser = new MutableLiveData<>();
     private final MutableLiveData<ArrayList<IDocument>> elements = new MutableLiveData<>(new ArrayList<>());
@@ -49,13 +50,13 @@ public class ForumFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forum_list, container, false);
-        recyclerView = view.findViewById(R.id.forumRecyclerView);
+        recyclerView = view.findViewById(R.id.forumList);
         setupForumModels(view);
         profileCollection.get(USER_ID, loggedInUser);
-        this.adapter = new PostRecyclerViewAdapter(getContext(), postsModels, loggedInUser);
+        this.adapter = new forumRecyclerViewAdapter(getContext(), forumModels, loggedInUser);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        postFragmentSwipeRefreshLayout = view.findViewById(R.id.swiperefresh);
+        postFragmentSwipeRefreshLayout = view.findViewById(R.id.swiperefreshForum);
 
         postFragmentSwipeRefreshLayout.setOnRefreshListener(() -> {
             final Handler handler = new Handler();
@@ -74,20 +75,20 @@ public class ForumFragment extends Fragment {
 
     private void setupForumModels(View view){
         elements.observe(getViewLifecycleOwner(), iDocuments -> {
-            ArrayList<DiscoveryPostModel> discoveryPosts = new ArrayList<>();
+            ArrayList<ForumPostModel> forumPosts = new ArrayList<>();
             for (IDocument iDocument : iDocuments) {
-                ForumPostModel post = (ForumPostModel) iDocument;
+                ForumsDocument post = (ForumsDocument) iDocument;
 
-                discoveryPosts.add(
+                forumPosts.add(
                         createPost(post)
                 );
             }
 
-            discoveryPosts.sort(Collections.reverseOrder());
+            forumPosts.sort(Collections.reverseOrder());
             int oldItems = adapter.itemCount;
 
-            recyclerView = view.findViewById(R.id.postsRecyclerViewList);
-            adapter.setArray(discoveryPosts);
+            recyclerView = view.findViewById(R.id.forumList);
+            adapter.setArray(forumPosts);
 
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -100,16 +101,16 @@ public class ForumFragment extends Fragment {
         dbConnection.getAll(elements);
 
     }
-    private static DiscoveryPostModel createPost(ForumPostModel b) {
+    private static ForumPostModel createPost(ForumsDocument b) {
 
-        return new DiscoveryPostModel(
-                b.getId(),
-                b.getUserId(),
-                b.getUsername(),
-                b.getContent(),
-                b.getTime(),
-                b.getCommentCount());
+        return new ForumPostModel(
+                b.id,
+                b.userId.toString(),
+                b.message,
+                b.timestamp.toString()
+        );
     }
+
 }
 
 

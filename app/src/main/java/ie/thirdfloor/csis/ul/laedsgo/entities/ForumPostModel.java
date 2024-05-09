@@ -4,25 +4,27 @@ package ie.thirdfloor.csis.ul.laedsgo.entities;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ForumPostModel implements Comparable<DiscoveryPostModel> {
+import ie.thirdfloor.csis.ul.laedsgo.dbConnection.interfeces.IDocument;
 
-    private Integer id;
-    private String userId;
-    private String username;
-    private String content;
-    private String time;
-    private ArrayList<Object> comments;
-    private Integer commentCount;
+public class ForumPostModel implements Comparable<ForumPostModel> {
+
+    public Integer id;
+    public String userId;
+    public String username;
+    public String content;
+    public String time;
+    public ArrayList<Object> comments;
+    public Integer commentCount;
 
     public ForumPostModel(){
 
     }
 
-    public ForumPostModel(Integer id, String userId, String username, String content, String time) {
+    public ForumPostModel(Integer id, String userId, String content, String time) {
         this.id = id;
         this.userId = userId;
-        this.username = username;
         this.content = content;
         this.time = time;
     }
@@ -91,7 +93,7 @@ public class ForumPostModel implements Comparable<DiscoveryPostModel> {
     }
 
     @Override
-    public int compareTo(DiscoveryPostModel o) {
+    public int compareTo(ForumPostModel o) {
         return 0;
     }
 }
