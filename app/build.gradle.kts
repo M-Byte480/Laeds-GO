@@ -8,6 +8,15 @@ android {
     namespace = "ie.thirdfloor.csis.ul.laedsgo"
     compileSdk = 34
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("C:\\Users\\kmila\\AndroidStudioProjects\\Laeds-GO\\key.jks")
+            storePassword = "$storePassword"
+            keyAlias = "key0"
+            keyPassword = "$keyPassword"
+        }
+    }
+
     defaultConfig {
         applicationId = "ie.thirdfloor.csis.ul.laedsgo"
         minSdk = 31

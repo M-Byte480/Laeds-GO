@@ -76,7 +76,7 @@ public class LoginFragment extends Fragment {
             Intent signInIntent = AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
-                    .setIsSmartLockEnabled(false)
+                    .setIsSmartLockEnabled(true)
                     .setTheme(R.style.FirebaseUI_AuthMethodPicker)
                     .build();
             signInLauncher.launch(signInIntent);
